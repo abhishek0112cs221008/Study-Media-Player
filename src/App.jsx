@@ -522,12 +522,13 @@ const StudyApp = () => {
             <div className="flex items-center gap-2.5 group cursor-pointer">
               <div className="relative">
                 <div className="w-9 h-7 bg-gradient-to-br from-red-600 via-red-500 to-rose-600 rounded-lg flex items-center justify-center shadow-xl shadow-red-500/40 group-hover:shadow-red-500/60 transition-all duration-300 group-hover:scale-105">
-                  <Play size={15} className="text-white fill-white ml-0.5" strokeWidth={0} />
+                  {/* <Play size={15} className="text-white fill-white ml-0.5" strokeWidth={0} /> */}
+                  <img src="src/assets/logo_white.png" alt="Logo" className='h-7'/>
                 </div>
               </div>
               <div className="flex flex-col leading-none">
                 <span className="text-[17px] font-semibold tracking-tight">Study</span>
-                <span className="text-[9px] text-gray-500 uppercase tracking-[0.15em] font-medium">Pro</span>
+                <span className="text-[9px] text-gray-500 uppercase tracking-[0.15em] font-medium">PRO</span>
               </div>
             </div>
           </div>
