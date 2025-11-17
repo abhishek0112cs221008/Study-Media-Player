@@ -521,7 +521,7 @@ const StudyApp = () => {
             </button>
             <div className="flex items-center gap-2.5 group cursor-pointer">
               <div className="relative">
-                <div className="w-9 h-7 bg-gradient-to-br from-red-600 via-red-500 to-rose-600 rounded-lg flex items-center justify-center shadow-xl shadow-red-500/40 group-hover:shadow-red-500/60 transition-all duration-300 group-hover:scale-105">
+                <div className="w-9 h-7 bg-gradient-to-br from-red-700 via-red-700 to-rose-700 rounded-lg flex items-center justify-center shadow-xl shadow-red-500/40 group-hover:shadow-red-500/60 transition-all duration-300 group-hover:scale-105">
                   {/* <Play size={15} className="text-white fill-white ml-0.5" strokeWidth={0} /> */}
                   <img src="src/assets/logo_white.png" alt="Logo" className='h-7'/>
                 </div>
