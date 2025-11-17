@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BookOpen, Search, Folder, Menu, Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Settings, Maximize, Tv, CheckCircle, StickyNote, Save, Trash2, Clock, ChevronRight, PlayCircle, Music, FileText, Sun, Moon, ArrowUpDown, Check } from 'lucide-react';
-
+import logo from './assets/logo_white.png';
 const StudyApp = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [courses, setCourses] = useState([]);
@@ -523,7 +523,7 @@ const StudyApp = () => {
               <div className="relative">
                 <div className="w-9 h-7 bg-gradient-to-br from-red-700 via-red-700 to-rose-700 rounded-lg flex items-center justify-center shadow-xl shadow-red-500/40 group-hover:shadow-red-500/60 transition-all duration-300 group-hover:scale-105">
                   {/* <Play size={15} className="text-white fill-white ml-0.5" strokeWidth={0} /> */}
-                  <img src="src/assets/logo_white.png" alt="Logo" className='h-7'/>
+                  <img src={logo} alt="Logo" className='h-7'/>
                 </div>
               </div>
               <div className="flex flex-col leading-none">
