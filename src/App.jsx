@@ -521,9 +521,79 @@ const StudyApp = () => {
             </button>
             <div className="flex items-center gap-2.5 group cursor-pointer">
               <div className="relative">
-                <div className="w-9 h-7 bg-gradient-to-br from-red-700 via-red-700 to-rose-700 rounded-lg flex items-center justify-center shadow-xl shadow-red-500/40 group-hover:shadow-red-500/60 transition-all duration-300 group-hover:scale-105">
-                  {/* <Play size={15} className="text-white fill-white ml-0.5" strokeWidth={0} /> */}
+                {/* <div className="w-8 h-8 bg-gradient-to-br from-red-700 via-red-700 to-rose-700 rounded-md flex items-center justify-center shadow-xl shadow-red-500/40 group-hover:shadow-red-500/60 transition-all duration-300 group-hover:scale-105">
+                  
                   <img src={logo} alt="Logo" className='h-7'/>
+                </div> */}
+                <div 
+                  className="relative w-8 h-8 cursor-pointer group"
+                  style={{ perspective: '1000px' }}
+                >
+                  {/* Animated glow rings */}
+                  <div className="absolute inset-0 bg-red-500 rounded-md blur-lg opacity-0 group-hover:opacity-60 transition-all duration-500 animate-pulse"></div>
+                  <div className="absolute inset-0 border-2 border-red-400/40 rounded-md scale-100 group-hover:scale-150 opacity-100 group-hover:opacity-0 transition-all duration-700"></div>
+                  
+                  {/* Main ticket-style container with notches */}
+                  <div className="relative w-8 h-8 bg-gradient-to-br from-red-700 via-red-700 to-rose-700 rounded-md flex items-center justify-center shadow-xl shadow-red-500/40 group-hover:shadow-red-500/80 transition-all duration-300 group-hover:scale-105 overflow-visible">
+                    
+                    {/* Ticket notches (semi-circles on sides) */}
+                    <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-3 bg-slate-900 rounded-r-full opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                    <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-3 bg-slate-900 rounded-l-full opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                    
+                    {/* Perforated line effect */}
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-px opacity-0 group-hover:opacity-30 transition-opacity duration-300 flex justify-around">
+                      <div className="w-0.5 h-px bg-white"></div>
+                      <div className="w-0.5 h-px bg-white"></div>
+                      <div className="w-0.5 h-px bg-white"></div>
+                      <div className="w-0.5 h-px bg-white"></div>
+                      <div className="w-0.5 h-px bg-white"></div>
+                    </div>
+                    
+                    {/* Flying sparkles */}
+                    <div className="absolute -top-1 -right-1 w-2.5 h-2.5 opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300">
+                      <div className="absolute inset-0">
+                        <div className="absolute top-0 left-1/2 w-0.5 h-2.5 bg-yellow-300 rounded-full transform -translate-x-1/2"></div>
+                        <div className="absolute left-0 top-1/2 w-2.5 h-0.5 bg-yellow-300 rounded-full transform -translate-y-1/2"></div>
+                      </div>
+                      <div className="absolute inset-0 animate-ping opacity-75">
+                        <div className="absolute top-0 left-1/2 w-0.5 h-2.5 bg-yellow-300 rounded-full transform -translate-x-1/2"></div>
+                        <div className="absolute left-0 top-1/2 w-2.5 h-0.5 bg-yellow-300 rounded-full transform -translate-y-1/2"></div>
+                      </div>
+                    </div>
+                    
+                    {/* Bottom sparkle */}
+                    <div className="absolute -bottom-1 -left-1 w-2 h-2 opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-400 delay-100">
+                      <div className="absolute inset-0">
+                        <div className="absolute top-0 left-1/2 w-0.5 h-2 bg-pink-300 rounded-full transform -translate-x-1/2"></div>
+                        <div className="absolute left-0 top-1/2 w-2 h-0.5 bg-pink-300 rounded-full transform -translate-y-1/2"></div>
+                      </div>
+                      <div className="absolute inset-0 animate-ping opacity-75">
+                        <div className="absolute top-0 left-1/2 w-0.5 h-2 bg-pink-300 rounded-full transform -translate-x-1/2"></div>
+                        <div className="absolute left-0 top-1/2 w-2 h-0.5 bg-pink-300 rounded-full transform -translate-y-1/2"></div>
+                      </div>
+                    </div>
+                    
+                    {/* Logo with 3D flip and shine */}
+                    <div className="relative overflow-hidden rounded transition-transform duration-500 group-hover:[transform:rotateY(360deg)]" style={{ transformStyle: 'preserve-3d' }}>
+                      <img src={logo} alt="Logo" className='h-7 relative z-10 drop-shadow-lg'/>
+                      
+                      {/* Diagonal shine sweep */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white to-transparent opacity-0 group-hover:opacity-50 transform -translate-x-full -translate-y-full group-hover:translate-x-full group-hover:translate-y-full transition-all duration-700"></div>
+                    </div>
+                    
+                    {/* Corner decorations */}
+                    <div className="absolute top-1 left-1 w-2 h-2 border-l-2 border-t-2 border-white/30 group-hover:border-white/50 transition-all duration-300 group-hover:scale-125"></div>
+                    <div className="absolute bottom-1 right-1 w-2 h-2 border-r-2 border-b-2 border-white/30 group-hover:border-white/50 transition-all duration-300 group-hover:scale-125"></div>
+                    
+                    {/* Floating particles */}
+                    <div className="absolute top-0 left-0 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" style={{ animationDelay: '0ms' }}></div>
+                    <div className="absolute top-1 right-0 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" style={{ animationDelay: '200ms' }}></div>
+                    <div className="absolute bottom-1 left-1 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" style={{ animationDelay: '400ms' }}></div>
+                  </div>
+                  
+                  {/* Ripple waves */}
+                  <div className="absolute inset-0 border-2 border-red-400/30 rounded-md scale-100 group-hover:scale-125 opacity-100 group-hover:opacity-0 transition-all duration-500"></div>
+                  <div className="absolute inset-0 border-2 border-red-400/20 rounded-md scale-100 group-hover:scale-150 opacity-100 group-hover:opacity-0 transition-all duration-700 delay-75"></div>
                 </div>
               </div>
               <div className="flex flex-col leading-none">
