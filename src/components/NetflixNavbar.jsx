@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Menu, X } from 'lucide-react';
+import { Search, Menu, X, Home, Library, FolderPlus, List, ChevronRight, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
+import NotificationBadge from './NotificationBadge';
 
-const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab }) => {
+const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, stats }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -19,83 +21,110 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab }
     }, []);
 
     const navLinks = [
-        { id: 'home', label: 'Home' },
-        { id: 'courses', label: 'Courses' },
-        { id: 'folder', label: 'Open Folder', action: onLoadFolder },
-        { id: 'list', label: 'My List' }
+        { id: 'home', label: 'Home', icon: Home },
+        { id: 'courses', label: 'Courses', icon: Library },
+        { id: 'list', label: 'My List', icon: List }
     ];
 
     return (
-        <nav className={clsx(
-            "fixed top-0 w-full z-50 transition-all duration-500 px-4 md:px-12 py-4 flex items-center justify-between",
-            isScrolled ? "bg-[#141414] shadow-lg" : "bg-gradient-to-b from-black/90 to-transparent"
-        )}>
+        <motion.nav
+            layout
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
+            className={clsx(
+                "fixed z-50 flex items-center justify-between",
+                isScrolled || mobileMenuOpen
+                    ? "top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl rounded-full px-6 py-4 bg-[#141414]/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+                    : "top-0 left-0 w-full rounded-none px-4 md:px-12 py-6 bg-gradient-to-b from-black/80 to-transparent border-transparent"
+            )}
+        >
 
-            <div className="flex items-center gap-12">
-                {/* Logo */}
-                <div
-                    className="text-2xl md:text-3xl font-black tracking-tighter text-[#E50914] cursor-pointer select-none hover:scale-105 transition-transform drop-shadow-md"
-                    onClick={() => setActiveTab('home')}
-                >
+            {/* Logo */}
+            <div
+                className="group relative cursor-pointer select-none flex items-center gap-2"
+                onClick={() => setActiveTab('home')}
+            >
+                <div className="absolute -inset-4 bg-red-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <span className="relative text-xl md:text-2xl font-black tracking-tighter text-[#E50914] drop-shadow-md font-nasa">
                     STUDYFLIX
-                </div>
+                </span>
+            </div>
 
-                {/* Desktop Links */}
-                <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-                    {navLinks.map(link => (
+            {/* Centered Desktop Links */}
+            <div className="hidden md:flex items-center gap-1 bg-white/5 p-1.5 rounded-full border border-white/5 backdrop-blur-sm">
+                {navLinks.map(link => {
+                    const Icon = link.icon;
+                    const isActive = activeTab === link.id;
+                    return (
                         <button
                             key={link.id}
                             onClick={() => {
-                                if (link.action) {
-                                    link.action();
-                                } else {
-                                    setActiveTab(link.id);
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                                }
+                                setActiveTab(link.id);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                             className={clsx(
-                                "transition-colors hover:text-white relative py-1",
-                                activeTab === link.id ? "text-white font-bold" : ""
+                                "relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2",
+                                isActive ? "text-white bg-white/10 shadow-inner" : "text-gray-400 hover:text-white hover:bg-white/5"
                             )}
                         >
+                            <Icon size={16} className={clsx("transition-transform", isActive && "scale-110")} />
                             {link.label}
-                            {activeTab === link.id && (
-                                <motion.div layoutId="nav-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#E50914]" />
+                            {link.id === 'list' && stats?.myListCount > 0 && (
+                                <NotificationBadge count={stats.myListCount} pulse={false} />
                             )}
                         </button>
-                    ))}
-                </div>
+                    );
+                })}
             </div>
 
             {/* Right Actions */}
-            <div className="flex items-center gap-6 text-white">
-                {/* Search Bar */}
+            <div className="flex items-center gap-4">
+                {/* Search Toggle */}
                 <div className={clsx(
-                    "flex items-center transition-all duration-300 overflow-hidden",
-                    showSearch ? "bg-black/50 border border-white/50 px-2 py-1 rounded gap-2 w-48 md:w-64" : "w-6 bg-transparent"
+                    "flex items-center transition-all duration-300 overflow-hidden rounded-full",
+                    showSearch ? "glass border-glow-hover pl-3 pr-1 py-1 w-48 md:w-64" : "w-10 h-10 justify-center hover:bg-white/10 rounded-full cursor-pointer"
                 )}>
-                    <button onClick={() => setShowSearch(!showSearch)} className="shrink-0 hover:scale-110 transition-transform">
-                        <Search size={22} className="text-white" />
-                    </button>
                     <AnimatePresence>
                         {showSearch && (
                             <motion.input
-                                initial={{ opacity: 0, x: 10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: 10 }}
+                                initial={{ opacity: 0, width: 0 }}
+                                animate={{ opacity: 1, width: 'auto' }}
+                                exit={{ opacity: 0, width: 0 }}
                                 type="text"
-                                placeholder="Titles, people, genres"
-                                className="bg-transparent border-none outline-none text-sm text-white placeholder-gray-400 w-full min-w-0"
+                                placeholder="Search courses..."
+                                className="bg-transparent border-none outline-none text-sm text-white placeholder-gray-400 w-full min-w-0 mr-2 focus:placeholder-gray-500"
                                 value={searchQuery}
                                 onChange={(e) => onSearch(e.target.value)}
                                 autoFocus
                             />
                         )}
                     </AnimatePresence>
+                    <button onClick={() => setShowSearch(!showSearch)} className="shrink-0 text-gray-300 hover:text-white transition-colors">
+                        <Search size={20} />
+                    </button>
                 </div>
 
+                {/* CTA Button: Add Folder */}
+                <button
+                    onClick={async () => {
+                        setIsLoading(true);
+                        await onLoadFolder();
+                        setIsLoading(false);
+                    }}
+                    disabled={isLoading}
+                    className="hidden md:flex items-center gap-2 bg-[#E50914] hover:bg-[#b81d24] text-white px-5 py-2.5 rounded-full font-bold text-sm transition-all duration-300 shadow-glow-red hover:shadow-glow-red-lg hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent shimmer opacity-0 group-hover:opacity-100"></div>
+                    {isLoading ? (
+                        <Loader2 size={18} className="relative z-10 spinner" />
+                    ) : (
+                        <FolderPlus size={18} className="relative z-10" />
+                    )}
+                    <span className="relative z-10">{isLoading ? 'Loading...' : 'Get Started'}</span>
+                    {!isLoading && <ChevronRight size={16} className="opacity-70 group-hover:translate-x-1 transition-transform relative z-10" />}
+                </button>
+
                 {/* Mobile Menu Toggle */}
-                <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                <button className="md:hidden text-white p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                     {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
@@ -104,32 +133,43 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab }
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -20, height: 0 }}
-                        animate={{ opacity: 1, y: 0, height: 'auto' }}
-                        exit={{ opacity: 0, y: -20, height: 0 }}
-                        className="absolute top-16 left-0 right-0 bg-[#141414] border-t border-gray-800 p-6 flex flex-col gap-6 text-center md:hidden shadow-2xl"
+                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        className="absolute top-full left-0 right-0 mt-4 bg-[#141414]/95 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 flex flex-col gap-4 text-center md:hidden shadow-2xl overflow-hidden"
                     >
-                        {navLinks.map(link => (
-                            <button
-                                key={link.id + 'mobile'}
-                                onClick={() => {
-                                    if (link.action) link.action();
-                                    else setActiveTab(link.id);
-                                    setMobileMenuOpen(false);
-                                }}
-                                className={clsx(
-                                    "text-gray-300 hover:text-white font-bold text-lg",
-                                    activeTab === link.id ? "text-white" : ""
-                                )}
-                            >
-                                {link.label}
-                            </button>
-                        ))}
+                        {navLinks.map(link => {
+                            const Icon = link.icon;
+                            return (
+                                <button
+                                    key={link.id + 'mobile'}
+                                    onClick={() => {
+                                        setActiveTab(link.id);
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className={clsx(
+                                        "flex items-center justify-center gap-3 p-3 rounded-xl transition-colors",
+                                        activeTab === link.id ? "bg-white/10 text-white" : "text-gray-400 hover:text-white hover:bg-white/5"
+                                    )}
+                                >
+                                    <Icon size={20} />
+                                    <span className="font-semibold text-lg">{link.label}</span>
+                                </button>
+                            );
+                        })}
+                        <div className="h-px bg-white/10 my-2" />
+                        <button
+                            onClick={() => { onLoadFolder(); setMobileMenuOpen(false); }}
+                            className="bg-[#E50914] text-white p-4 rounded-xl font-bold flex items-center justify-center gap-2"
+                        >
+                            <FolderPlus size={20} />
+                            Get Started
+                        </button>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-        </nav>
+        </motion.nav>
     );
 };
 
