@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Menu, X, Home, Library, FolderPlus, List, ChevronRight, Loader2 } from 'lucide-react';
+import { Search, Menu, X, Home, Library, FolderPlus, List, ChevronRight, Loader2, Palette } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import NotificationBadge from './NotificationBadge';
 
-const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, stats }) => {
+const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, stats, onOpenThemeSelector }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,26 +31,25 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
             layout
             transition={{ type: "spring", stiffness: 120, damping: 20 }}
             className={clsx(
-                "fixed z-50 flex items-center justify-between",
-                isScrolled || mobileMenuOpen
-                    ? "top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl rounded-full px-6 py-4 bg-[#141414]/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
-                    : "top-0 left-0 w-full rounded-none px-4 md:px-12 py-6 bg-gradient-to-b from-black/80 to-transparent border-transparent"
+                "fixed z-50 flex items-center justify-between transition-all duration-300",
+                // FLOATING PILL DESIGN always active (or mostly) for this specific look
+                "top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full px-5 py-2 bg-[#111]/90 backdrop-blur-xl border border-white/10 shadow-2xl"
             )}
         >
 
-            {/* Logo */}
+            {/* Logo - Red Bebas Style */}
             <div
                 className="group relative cursor-pointer select-none flex items-center gap-2"
                 onClick={() => setActiveTab('home')}
+                aria-label="Go to Home"
             >
-                <div className="absolute -inset-4 bg-red-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <span className="relative text-xl md:text-2xl font-black tracking-tighter text-[#E50914] drop-shadow-md font-nasa">
+                <span className="relative text-3xl md:text-4xl font-normal tracking-tight text-[#E50914] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] font-['Bebas_Neue'] scale-y-105">
                     STUDYFLIX
                 </span>
             </div>
 
-            {/* Centered Desktop Links */}
-            <div className="hidden md:flex items-center gap-1 bg-white/5 p-1.5 rounded-full border border-white/5 backdrop-blur-sm">
+            {/* Centered Desktop Links - Pill Container */}
+            <div className="hidden md:flex items-center gap-1 bg-[#222]/50 p-1 rounded-full border border-white/5 backdrop-blur-md">
                 {navLinks.map(link => {
                     const Icon = link.icon;
                     const isActive = activeTab === link.id;
@@ -62,11 +61,14 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                             className={clsx(
-                                "relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2",
-                                isActive ? "text-white bg-white/10 shadow-inner" : "text-gray-400 hover:text-white hover:bg-white/5"
+                                "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300",
+                                isActive
+                                    ? "bg-[#333] text-white shadow-sm"
+                                    : "text-gray-400 hover:text-white hover:bg-white/5"
                             )}
+                            aria-label={link.label}
                         >
-                            <Icon size={16} className={clsx("transition-transform", isActive && "scale-110")} />
+                            <Icon size={16} className={clsx("transition-transform", isActive && "scale-105")} />
                             {link.label}
                             {link.id === 'list' && stats?.myListCount > 0 && (
                                 <NotificationBadge count={stats.myListCount} pulse={false} />
@@ -78,32 +80,33 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
 
             {/* Right Actions */}
             <div className="flex items-center gap-4">
-                {/* Search Toggle */}
-                <div className={clsx(
-                    "flex items-center transition-all duration-300 overflow-hidden rounded-full",
-                    showSearch ? "glass border-glow-hover pl-3 pr-1 py-1 w-48 md:w-64" : "w-10 h-10 justify-center hover:bg-white/10 rounded-full cursor-pointer"
-                )}>
-                    <AnimatePresence>
-                        {showSearch && (
-                            <motion.input
-                                initial={{ opacity: 0, width: 0 }}
-                                animate={{ opacity: 1, width: 'auto' }}
-                                exit={{ opacity: 0, width: 0 }}
-                                type="text"
-                                placeholder="Search courses..."
-                                className="bg-transparent border-none outline-none text-sm text-white placeholder-gray-400 w-full min-w-0 mr-2 focus:placeholder-gray-500"
-                                value={searchQuery}
-                                onChange={(e) => onSearch(e.target.value)}
-                                autoFocus
-                            />
-                        )}
-                    </AnimatePresence>
-                    <button onClick={() => setShowSearch(!showSearch)} className="shrink-0 text-gray-300 hover:text-white transition-colors">
-                        <Search size={20} />
-                    </button>
+                {/* Search Bar - Dark Pill */}
+                <div className="hidden md:flex items-center bg-[#222]/80 border border-white/5 rounded-full px-3 py-1.5 w-64 focus-within:w-72 focus-within:bg-[#333] transition-all duration-300">
+                    <input
+                        type="text"
+                        placeholder="Search courses..."
+                        className="bg-transparent border-none outline-none text-sm text-white placeholder-gray-500 w-full"
+                        value={searchQuery}
+                        onChange={(e) => onSearch(e.target.value)}
+                    />
+                    <Search size={18} className="text-gray-400" />
                 </div>
+                {/* Mobile Search Icon */}
+                <button onClick={() => setShowSearch(!showSearch)} className="md:hidden text-gray-300 hover:text-white">
+                    <Search size={22} />
+                </button>
 
-                {/* CTA Button: Add Folder */}
+
+                {/* Theme Selector Button */}
+                <button
+                    onClick={onOpenThemeSelector}
+                    className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 text-gray-300 hover:text-white transition-all duration-300"
+                    title="Theme Options"
+                >
+                    <Palette size={20} />
+                </button>
+
+                {/* CTA Button: Get Started (Red) */}
                 <button
                     onClick={async () => {
                         setIsLoading(true);
@@ -111,16 +114,15 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                         setIsLoading(false);
                     }}
                     disabled={isLoading}
-                    className="hidden md:flex items-center gap-2 bg-[#E50914] hover:bg-[#b81d24] text-white px-5 py-2.5 rounded-full font-bold text-sm transition-all duration-300 shadow-glow-red hover:shadow-glow-red-lg hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="hidden md:flex items-center gap-2 bg-[#E50914] hover:bg-[#ff0f1f] text-white px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 shadow-[0_4px_15px_rgba(229,9,20,0.4)] hover:shadow-[0_6px_20px_rgba(229,9,20,0.6)] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent shimmer opacity-0 group-hover:opacity-100"></div>
                     {isLoading ? (
-                        <Loader2 size={18} className="relative z-10 spinner" />
+                        <Loader2 size={18} className="animate-spin" />
                     ) : (
-                        <FolderPlus size={18} className="relative z-10" />
+                        <FolderPlus size={18} />
                     )}
-                    <span className="relative z-10">{isLoading ? 'Loading...' : 'Get Started'}</span>
-                    {!isLoading && <ChevronRight size={16} className="opacity-70 group-hover:translate-x-1 transition-transform relative z-10" />}
+                    <span>{isLoading ? 'Loading...' : 'Get Started'}</span>
+                    {!isLoading && <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />}
                 </button>
 
                 {/* Mobile Menu Toggle */}
@@ -138,6 +140,19 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
                         className="absolute top-full left-0 right-0 mt-4 bg-[#141414]/95 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 flex flex-col gap-4 text-center md:hidden shadow-2xl overflow-hidden"
                     >
+                        {/* Mobile Search Input */}
+                        <div className="flex items-center bg-[#222] rounded-full px-4 py-3 border border-white/10">
+                            <Search size={18} className="text-gray-400 mr-2" />
+                            <input
+                                type="text"
+                                placeholder="Search courses..."
+                                className="bg-transparent border-none outline-none text-white w-full"
+                                value={searchQuery}
+                                onChange={(e) => onSearch(e.target.value)}
+                            />
+                        </div>
+
+
                         {navLinks.map(link => {
                             const Icon = link.icon;
                             return (
