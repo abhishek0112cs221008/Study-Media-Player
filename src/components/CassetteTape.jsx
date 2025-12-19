@@ -10,7 +10,7 @@ const CassetteTape = ({ title, active = false, progress = 0 }) => {
 
     return (
         <div className={clsx(
-            "relative w-full aspect-[1.6] bg-[#1a1a1a] rounded-[10px] shadow-xl overflow-hidden select-none",
+            "relative w-full aspect-[1.6] bg-[#1a1a1a] rounded-[5px] shadow-xl overflow-hidden select-none",
             "border-2 border-[#2a2a2a]",
             "group/tape"
         )}>
@@ -27,7 +27,7 @@ const CassetteTape = ({ title, active = false, progress = 0 }) => {
             ))}
 
             {/* Main Sticker/Label Area */}
-            <div className="absolute inset-[6px] rounded-[6px] overflow-hidden flex flex-col z-10">
+            <div className="absolute inset-[6px] rounded-[5px] overflow-hidden flex flex-col z-10">
 
                 {/* Top Header (Dark Grey) */}
                 <div className="h-[25%] bg-[#262626] border-b border-white/10 flex items-center px-4 relative">
@@ -40,7 +40,7 @@ const CassetteTape = ({ title, active = false, progress = 0 }) => {
                             {title || "Untitled Mix"}
                         </h3>
                     </div>
-                    <span className="text-[8px] font-bold text-gray-500 ml-2 border border-gray-600 px-1 rounded">A</span>
+                    <span className="text-[8px] font-bold text-gray-500 ml-2 border border-gray-600 px-1 rounded-[5px]">A</span>
                 </div>
 
                 {/* Middle Section (Black) */}
@@ -65,7 +65,7 @@ const CassetteTape = ({ title, active = false, progress = 0 }) => {
                         </motion.div>
 
                         {/* Tape Window / Middle View */}
-                        <div className="flex-1 h-3 md:h-4 bg-[#0a0a0a] mx-2 relative overflow-hidden ring-1 ring-white/5 rounded-sm">
+                        <div className="flex-1 h-3 md:h-4 bg-[#0a0a0a] mx-2 relative overflow-hidden ring-1 ring-white/5 rounded-[5px]">
                             {/* Tape remaining visual */}
                             <div className="absolute top-0 bottom-0 left-0 bg-[#333] w-full opacity-80"></div>
                         </div>

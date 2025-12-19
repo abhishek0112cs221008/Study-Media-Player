@@ -12,7 +12,7 @@ import ThemeSelector from './components/ThemeSelector';
 import VideoMetadata from './components/VideoMetadata';
 import { scanDirectory } from './utils/fileSystem';
 import { applyTheme } from './utils/themeConfig';
-import { Play, ChevronDown, BookOpen, ArrowLeft, Monitor, Laptop, Smartphone } from 'lucide-react';
+import { Play, ChevronDown, BookOpen, ArrowLeft, ArrowRight, Monitor, Laptop, Smartphone } from 'lucide-react';
 
 // --- Utility: Format Title ---
 const formatTitle = (name) => {
@@ -39,7 +39,6 @@ const StudyApp = () => {
   const [volume, setVolume] = useState(1);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [viewMode, setViewMode] = useState('browse');
-  const [isStudyMode, setIsStudyMode] = useState(true);
   const [theme, setTheme] = useState('black');
   const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false); // Toggle for Video Lessons grid
@@ -79,7 +78,6 @@ const StudyApp = () => {
       setMyList(data.myList || []);
       setVolume(data.volume !== undefined ? data.volume : 1);
       setPlaybackSpeed(data.playbackSpeed || 1);
-      setIsStudyMode(data.isStudyMode || false);
       setTheme(data.theme || 'black');
       applyTheme(data.theme || 'black');
     } else {
@@ -97,9 +95,9 @@ const StudyApp = () => {
   }, [theme]);
 
   useEffect(() => {
-    const data = { progress, playbackTimes, notes, myList, volume, playbackSpeed, darkMode: true, isStudyMode, theme };
+    const data = { progress, playbackTimes, notes, myList, volume, playbackSpeed, darkMode: true, theme };
     localStorage.setItem('studyAppState', JSON.stringify(data));
-  }, [progress, playbackTimes, notes, myList, volume, playbackSpeed, isStudyMode, theme]);
+  }, [progress, playbackTimes, notes, myList, volume, playbackSpeed, theme]);
 
   // --- Helpers ---
   const getSiblings = (lesson) => {
@@ -107,12 +105,14 @@ const StudyApp = () => {
     const parts = lesson.path.split('/');
     parts.pop();
     const parentPath = parts.join('/');
-    return allLessons.filter(l => {
+    const siblings = allLessons.filter(l => {
       if (!l.path) return false;
       const lParts = l.path.split('/');
       lParts.pop();
       return lParts.join('/') === parentPath;
     });
+    // Sort siblings numerically/alphabetically by name
+    return siblings.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
   };
 
   const getNextCourse = (lesson) => {
@@ -637,117 +637,68 @@ const StudyApp = () => {
           onClick={handleWatchMouseMove}
           style={{ background: 'var(--theme-background)' }}
         >
-          {/* Cleaner Header - YouTube Style */}
-          <div
-            className={clsx(
-              "sticky top-0 z-50 backdrop-blur-md transition-opacity duration-500",
-              !showWatchControls ? "opacity-0" : "opacity-100"
-            )}
-            style={{
-              background: isStudyMode ? 'var(--theme-background)' : 'rgba(0, 0, 0, 0.8)',
-              borderBottom: isStudyMode ? '1px solid var(--theme-border)' : 'none'
-            }}
-          >
-            <div className="max-w-[1920px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
-              {/* Left: Back Button + STUDYFLIX Logo */}
-              <div className="flex items-center gap-3 min-w-0 flex-1">
-                <button
-                  onClick={() => setViewMode('browse')}
-                  className="flex items-center justify-center w-9 h-9 rounded-full transition-all shrink-0"
-                  style={{
-                    background: isStudyMode ? 'var(--theme-background-elevated)' : 'rgba(255, 255, 255, 0.1)',
-                    color: isStudyMode ? 'var(--theme-text-primary)' : 'white'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = isStudyMode ? 'var(--theme-background)' : 'rgba(255, 255, 255, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = isStudyMode ? 'var(--theme-background-elevated)' : 'rgba(255, 255, 255, 0.1)';
-                  }}
-                  title="Back to browse"
-                >
-                  <ArrowLeft size={18} />
-                </button>
-
-                <h1
-                  className="text-2xl font-black tracking-tight font-sans"
-                  style={{
-                    color: 'white',
-                    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
-                  }}
-                >
-                  StudyFlix
-                </h1>
-              </div>
-
-              {/* Right: Mode Toggle - REMOVED */}
-              <div className="flex items-center gap-3 shrink-0">
-                {/* Toggle removed as per user request to remove Theater/Cinema mode */}
-              </div>
-            </div>
-          </div>
-
           {/* Layout Container */}
-          {isStudyMode ? (
-            <div className="flex-1 flex w-full h-full overflow-hidden" style={{ background: 'var(--theme-background)' }}>
-              {/* Main Content Area (Left) - Video + Metadata */}
-              <div className="flex-1 lg:w-[75%] flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-800">
-                {/* Video Player with spacing */}
-                <div className="w-full bg-black p-4">
-                  <div className="w-full bg-black aspect-video rounded-lg overflow-hidden shadow-2xl">
-                    {['video', 'audio'].includes(currentLesson.type) ? (
-                      <VideoPlayer
-                        lesson={currentLesson}
-                        savedVolume={volume}
-                        savedSpeed={playbackSpeed}
-                        initialTime={playbackTimes[currentLesson.path] || 0}
-                        onTimeUpdate={handleLessonUpdate}
-                        onVolumeChange={setVolume}
-                        onSpeedChange={setPlaybackSpeed}
-                        onEnded={() => setProgress(prev => ({ ...prev, [currentLesson.path]: 100 }))}
-                        autoPlay={true}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <PDFViewer url={currentLesson.url} darkMode={theme === 'black'} />
-                      </div>
-                    )}
+          <div className="flex-1 flex w-full h-screen overflow-hidden p-6 gap-6" style={{ background: 'var(--theater-bg)' }}>
+            {/* Main Content Area (Left) - Video Area */}
+            <div className="flex-[3] flex flex-col min-h-0 overflow-y-auto custom-scrollbar pr-2">
+              <div className="theater-container flex flex-col relative shrink-0">
+                {/* Video Player Container */}
+                <div className="flex-1 flex items-center justify-center min-h-0 bg-black/20">
+                  <div className="w-full h-full max-h-full max-w-full flex items-center justify-center overflow-hidden">
+                    <div className="w-full aspect-video shadow-2xl relative">
+                      {['video', 'audio'].includes(currentLesson.type) ? (
+                        <VideoPlayer
+                          lesson={currentLesson}
+                          savedVolume={volume}
+                          savedSpeed={playbackSpeed}
+                          initialTime={playbackTimes[currentLesson.path] || 0}
+                          onTimeUpdate={handleLessonUpdate}
+                          onVolumeChange={setVolume}
+                          onSpeedChange={setPlaybackSpeed}
+                          onEnded={() => setProgress(prev => ({ ...prev, [currentLesson.path]: 100 }))}
+                          autoPlay={true}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <PDFViewer url={currentLesson.url} darkMode={theme === 'black'} />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Video Metadata Below Player */}
-                <VideoMetadata
-                  lesson={currentLesson}
-                  progress={progress[currentLesson.path] || 0}
-                  inList={myList.includes(currentLesson.path)}
-                  onToggleList={() => handleToggleList(currentLesson)}
-                  formatTitle={formatTitle}
-                />
+                {/* Bottom Status Bar for Video - Now with COMPLETE Metadata */}
+                <div className="theater-status-bar">
+                  <div className="flex items-center gap-4 w-full">
+                    <div className="px-3 py-1 border border-[var(--theater-accent)]/40 rounded-full text-[var(--theater-accent)] text-[10px] font-bold uppercase tracking-widest font-nasa">
+                      Now Playing
+                    </div>
+                    <div className="text-white text-xs font-bold truncate flex-1 flex items-center gap-2">
+                      <span>{formatTitle(currentLesson.name)}</span>
+                      <span className="text-[9px] bg-white/5 px-1.5 py-0.5 rounded text-gray-500 uppercase tracking-widest font-mono">
+                        {currentLesson.type}
+                      </span>
+                    </div>
 
-                {/* Notes Section Below Metadata */}
-                <div className="p-6" style={{ background: 'var(--theme-background)' }}>
-                  <h3 className="text-lg font-bold mb-4" style={{ color: 'var(--theme-text-primary)' }}>
-                    My Notes
-                  </h3>
-                  <NotesSection
-                    notes={notes[currentLesson.path] || []}
-                    onAddNote={handleAddNote}
-                    onDeleteNote={handleDeleteNote}
-                    getCurrentTime={() => videoTimeRef.current()}
-                    darkMode={theme === 'black'}
-                    onJumpToTimestamp={(ts) => {
-                      const v = document.querySelector('video') || document.querySelector('audio');
-                      if (v) {
-                        v.currentTime = ts;
-                        v.play();
-                      }
-                    }}
-                  />
+                    <div className="flex items-center gap-6 text-[10px] font-bold tracking-widest text-[var(--theater-text-muted)]">
+                      <div className="flex items-center gap-2 text-white bg-[var(--theater-accent)] px-2 py-1 rounded">
+                        <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        98% MATCH
+                      </div>
+                      <div className="bg-white/5 border border-white/10 px-2 py-1 rounded">4K ULTRA HD</div>
+                      <div className="uppercase bg-white/5 border border-white/10 px-2 py-1 rounded">{currentLesson.name.split('.').pop()}</div>
+                      <div className="text-[var(--theater-accent)] font-nasa text-sm">
+                        {Math.floor(progress[currentLesson.path] || 0)}%
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              {/* Playlist Sidebar (Right) - YouTube Style */}
-              <div className="hidden lg:block lg:w-[25%] h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-800" style={{ background: 'var(--theme-background-light)', borderLeft: '1px solid var(--theme-border)' }}>
+            {/* Sidebar Area (Right) */}
+            <div className="flex-1 flex flex-col min-h-0">
+              <div className="flex-1 overflow-hidden">
                 <RightPanel
                   notes={notes[currentLesson.path] || []}
                   onAddNote={handleAddNote}
@@ -763,158 +714,40 @@ const StudyApp = () => {
                   progress={progress}
                   nextCourse={nextCourse ? { ...nextCourse, name: formatTitle(nextCourse.name) } : null}
                   onPlayCourse={handlePlay}
+                  onGoHome={() => setViewMode('browse')}
                 />
               </div>
+
+              {/* Bottom Status Bar for Sidebar - Now JUMPS TO NEXT FOLDER */}
+              {(() => {
+                return (
+                  <div
+                    className="theater-status-bar cursor-pointer hover:brightness-125 transition-all group/upnext shadow-none border-t border-white/5"
+                    style={{ background: 'var(--theater-surface)', marginTop: '0.5rem' }}
+                    onClick={() => {
+                      if (nextCourse) {
+                        handlePlay(nextCourse);
+                      } else {
+                        setViewMode('browse'); // Go home if no more courses
+                      }
+                    }}
+                  >
+                    <div className="flex items-center gap-3 w-full">
+                      <div className="px-4 py-1.5 border border-[var(--theater-accent)]/30 rounded-[5px] text-[var(--theater-accent)] text-[10px] font-black uppercase tracking-widest font-nasa group-hover/upnext:bg-[var(--theater-accent)] group-hover/upnext:text-black transition-all duration-300 shadow-lg shadow-red-900/20">
+                        {nextCourse ? 'Next Folder' : 'No More Folders'}
+                      </div>
+                      <div className="text-white/90 text-xs font-bold truncate flex-1 leading-none uppercase tracking-tighter">
+                        {nextCourse ? `Jump to: ${formatTitle(nextCourse.name)}` : "Back to Home"}
+                      </div>
+                      <ArrowRight size={14} className="text-[var(--theater-accent)] opacity-0 group-hover/upnext:opacity-100 transition-opacity" />
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
-          ) : (
-            // --- CINEMA MODE (YouTube-Style) ---
-            <div className="flex-1 w-full h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-800 bg-[#0f0f0f]">
-              {/* Video Container - Centered with max-width */}
-              <div className="w-full bg-black">
-                <div className="max-w-[1280px] mx-auto">
-                  <div className="aspect-video bg-black relative">
-                    {['video', 'audio'].includes(currentLesson.type) ? (
-                      <VideoPlayer
-                        lesson={currentLesson}
-                        savedVolume={volume}
-                        savedSpeed={playbackSpeed}
-                        initialTime={playbackTimes[currentLesson.path] || 0}
-                        onTimeUpdate={handleLessonUpdate}
-                        onVolumeChange={setVolume}
-                        onSpeedChange={setPlaybackSpeed}
-                        onEnded={() => setProgress(prev => ({ ...prev, [currentLesson.path]: 100 }))}
-                        autoPlay={true}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <PDFViewer url={currentLesson.url} darkMode={true} />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Video Metadata Section */}
-              <VideoMetadata
-                lesson={currentLesson}
-                progress={progress[currentLesson.path] || 0}
-                inList={myList.includes(currentLesson.path)}
-                onToggleList={() => handleToggleList(currentLesson)}
-                formatTitle={formatTitle}
-              />
-
-              {/* Content Below Video */}
-              <div className="relative z-20 max-w-[1280px] mx-auto">
-                {/* Related Content */}
-                {siblings.length > 0 && (
-                  <div className="px-4 py-6 border-b border-white/5">
-                    <h3 className="text-lg font-bold text-white mb-4">Up Next from this Course</h3>
-                    <div className="space-y-2">
-                      {siblings.slice(0, 5).map((item, idx) => (
-                        <div
-                          key={idx}
-                          onClick={() => handlePlay(item)}
-                          className="flex gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors group"
-                        >
-                          <div className="w-40 h-24 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg shrink-0 flex items-center justify-center relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-gray-700/20 to-transparent"></div>
-                            <span className="text-xs font-bold text-gray-500 relative z-10">{item.type.toUpperCase()}</span>
-                            {(progress[item.path] || 0) > 0 && (
-                              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
-                                <div className="h-full bg-red-600" style={{ width: `${progress[item.path]}%` }}></div>
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium text-white line-clamp-2 group-hover:text-red-500 transition-colors">
-                              {formatTitle(item.name)}
-                            </h4>
-                            <p className="text-xs text-gray-400 mt-1 capitalize">{item.type}</p>
-                            {(progress[item.path] || 0) > 0 && (
-                              <p className="text-xs text-green-500 mt-1">{Math.round(progress[item.path])}% complete</p>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="px-4 py-8 space-y-8">
-                  {/* Left Col: Next Course & Metadata */}
-                  <div className="lg:col-span-1 space-y-8">
-                    {nextCourse && (
-                      <div className="bg-[#1a1a1a] rounded-xl p-6 border border-white/5 hover:border-white/10 transition-colors group cursor-pointer" onClick={() => handlePlay(nextCourse)}>
-                        <h4 className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4">Up Next Module</h4>
-                        <div className="flex items-start gap-4">
-                          <div className="w-16 h-16 bg-red-600/10 rounded-lg flex items-center justify-center shrink-0 text-red-500 group-hover:text-red-400 group-hover:scale-105 transition-all">
-                            <BookOpen size={32} />
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-bold text-gray-100 group-hover:text-white mb-1 line-clamp-2">{formatTitle(nextCourse.name)}</h3>
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                              <span>Start this folder</span>
-                              <ArrowLeft className="rotate-180" size={16} />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="bg-[#1a1a1a] rounded-xl p-6 border border-white/5">
-                      <h4 className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4">Current Progress</h4>
-                      <div className="flex items-center gap-4 mb-2">
-                        <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-                          <div className="h-full bg-red-600 rounded-full" style={{ width: `${progress[currentLesson.path] || 0}%` }} />
-                        </div>
-                        <span className="text-sm font-mono text-gray-300">{Math.round(progress[currentLesson.path] || 0)}%</span>
-                      </div>
-                      {progress[currentLesson.path] >= 90 && (
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-500 rounded-full text-xs font-bold uppercase">
-                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                          Completed
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right Col: Notes */}
-                  <div className="lg:col-span-2">
-                    {/* Note Section same as before */}
-                    <div className="bg-[#1a1a1a] rounded-xl border border-white/5 overflow-hidden min-h-[500px]">
-                      <div className="p-6 border-b border-white/5 bg-[#1f1f1f]">
-                        <h3 className="text-xl font-bold text-gray-100 flex items-center gap-2">
-                          <div className="w-1 h-6 bg-red-600 rounded-full" />
-                          My Notes
-                        </h3>
-                      </div>
-                      <div className="p-6">
-                        <NotesSection
-                          notes={notes[currentLesson.path] || []}
-                          onAddNote={handleAddNote}
-                          onDeleteNote={handleDeleteNote}
-                          getCurrentTime={() => videoTimeRef.current()}
-                          darkMode={true}
-                          onJumpToTimestamp={(ts) => {
-                            const v = document.querySelector('video') || document.querySelector('audio');
-                            if (v) {
-                              v.currentTime = ts;
-                              v.play();
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
-      )
-      }
-      <div className="h-4"></div>
+      )}
     </div>
   );
 };

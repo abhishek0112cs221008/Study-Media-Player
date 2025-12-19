@@ -53,16 +53,29 @@
     --space-24: 96px;
 
     /* Border Radius */
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
+    --radius-sm: 5px;
+    --radius-md: 5px;
+    --radius-lg: 5px;
+    --radius-xl: 5px;
 
     /* Shadows */
     --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.12);
     --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.16);
     --shadow-strong: 0 10px 40px rgba(0, 0, 0, 0.3);
     --shadow-glow: 0 0 20px var(--theme-glow);
+
+    /* Sophisticated Professional Palette (Netflix inspired) */
+    --theater-accent: #E50914;
+    /* Netflix Red */
+    --theater-bg: #0F0F11;
+    /* Deep Charcoal Base */
+    --theater-surface: #18181B;
+    /* Zink Elevated Surface */
+    --theater-border: rgba(255, 255, 255, 0.05);
+    --theater-text: #F8FAFC;
+    /* High Contrast Slate White */
+    --theater-text-muted: #71717A;
+    /* Muted Zinc */
   }
 
   html {
@@ -126,16 +139,116 @@
     height: auto;
   }
 
-  /* Global Scrollbar Hiding */
+  /* Global Scrollbar Styling */
   ::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    display: none;
+    width: 6px;
+    height: 6px;
+    display: block;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(229, 9, 20, 0.2);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(229, 9, 20, 0.4);
   }
 
   /* Firefox scrollbar */
   * {
     scrollbar-width: none;
+  }
+
+  /* Theater UI Utilities */
+  .theater-container {
+    border: none;
+    border-radius: 5px;
+    background: var(--theater-bg);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* Removed overflow: hidden and max-height to allow scrolling in parent */
+  }
+
+  .theater-status-bar {
+    border: 1px solid var(--theater-border);
+    border-radius: 5px;
+    height: 4rem;
+    background: var(--theater-surface);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    margin-top: 1.5rem;
+    /* Increased spacing */
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 10;
+    transition: all 0.3s var(--ease-out);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .theater-status-bar:hover {
+    border-color: var(--theater-accent);
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.1);
+  }
+
+  .theater-breadcrumb {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--theater-text);
+    letter-spacing: 0.01em;
+    padding: 1rem 1.5rem;
+    background: var(--theater-surface);
+    border-bottom: 1px solid var(--theater-border);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .theater-tab-container {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .theater-tab {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #98989D;
+    /* Muted gray for inactive */
+    position: relative;
+    padding: 0.5rem 0;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    letter-spacing: 0.05em;
+  }
+
+  .theater-tab.active {
+    color: #FFFFFF;
+    /* Bright white for active */
+    opacity: 1;
+  }
+
+  .theater-tab.active {
+    opacity: 1;
+  }
+
+  .theater-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--theater-accent);
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--theater-accent);
   }
 }
 

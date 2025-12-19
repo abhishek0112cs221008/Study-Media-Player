@@ -17,7 +17,9 @@ const RightPanel = ({
     onPlayLesson,
     progress,
     nextCourse,
-    onPlayCourse
+    onPlayCourse,
+
+    onGoHome,
 }) => {
     const [activeTab, setActiveTab] = useState('playlist'); // Default to playlist like YouTube
     const [sortOrder, setSortOrder] = useState('default'); // 'default' | 'asc' | 'desc'
@@ -34,46 +36,33 @@ const RightPanel = ({
     }, [playlist, sortOrder]);
 
     return (
-        <div className="h-full flex flex-col" style={{ background: 'var(--theme-background-light)' }}>
-            {/* Tabs Header - YouTube Style */}
-            <div className="flex items-center shrink-0" style={{ borderBottom: '1px solid var(--theme-border)' }}>
+        <div className="h-full flex flex-col theater-container" style={{ background: 'var(--theater-bg)' }}>
+            {/* Breadcrumbs - Drawing Style Dynamic */}
+            <div className="theater-breadcrumb flex items-center gap-1 group">
+                <button
+                    onClick={onGoHome}
+                    className="hover:text-white transition-colors"
+                    title="Go to Home"
+                >
+                    Home
+                </button>
+                <span className="opacity-40 mx-1">&gt;</span>
+                <span className="text-[var(--theater-accent)] font-bold tracking-tight uppercase ml-2 text-sm">Study Mode</span>
+            </div>
+
+            {/* Tabs Header - Drawing Style */}
+            <div className="theater-tab-container bg-black/40 backdrop-blur-md">
                 <button
                     onClick={() => setActiveTab('playlist')}
-                    className={clsx(
-                        "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold transition-all relative",
-                    )}
-                    style={{
-                        color: activeTab === 'playlist' ? 'var(--theme-text-primary)' : 'var(--theme-text-secondary)',
-                    }}
+                    className={clsx("theater-tab pb-4", activeTab === 'playlist' && "active")}
                 >
-                    <ListVideo size={18} />
-                    <span>Playlist</span>
-                    {activeTab === 'playlist' && (
-                        <motion.div
-                            layoutId="tab-indicator"
-                            className="absolute bottom-0 left-0 right-0 h-0.5"
-                            style={{ background: 'var(--theme-primary)' }}
-                        />
-                    )}
+                    PLAYLIST
                 </button>
                 <button
                     onClick={() => setActiveTab('notes')}
-                    className={clsx(
-                        "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold transition-all relative",
-                    )}
-                    style={{
-                        color: activeTab === 'notes' ? 'var(--theme-text-primary)' : 'var(--theme-text-secondary)',
-                    }}
+                    className={clsx("theater-tab pb-4", activeTab === 'notes' && "active")}
                 >
-                    <StickyNote size={18} />
-                    <span>Notes ({notes.length})</span>
-                    {activeTab === 'notes' && (
-                        <motion.div
-                            layoutId="tab-indicator"
-                            className="absolute bottom-0 left-0 right-0 h-0.5"
-                            style={{ background: 'var(--theme-primary)' }}
-                        />
-                    )}
+                    NOTES
                 </button>
             </div>
 
@@ -95,16 +84,16 @@ const RightPanel = ({
                         {/* Playlist Header with Sort */}
                         <div className="px-4 py-3 flex items-center justify-between" style={{ borderBottom: '1px solid var(--theme-border)' }}>
                             <div>
-                                <h3 className="font-semibold text-sm" style={{ color: 'var(--theme-text-primary)' }}>
+                                <h3 className="font-bold text-[11px] uppercase tracking-wider text-[var(--theater-text)]">
                                     Up Next
                                 </h3>
-                                <p className="text-xs mt-0.5" style={{ color: 'var(--theme-text-secondary)' }}>
+                                <p className="text-[10px] text-[var(--theater-text-muted)]">
                                     {playlist.length} {playlist.length === 1 ? 'video' : 'videos'}
                                 </p>
                             </div>
                             <button
                                 onClick={() => setSortOrder(prev => prev === 'default' ? 'asc' : prev === 'asc' ? 'desc' : 'default')}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] text-xs font-medium transition-all"
                                 style={{
                                     background: 'var(--theme-background-elevated)',
                                     color: 'var(--theme-text-secondary)',
@@ -131,23 +120,14 @@ const RightPanel = ({
                                     return (
                                         <div
                                             key={item.path}
-                                            onClick={() => onPlayLesson(item)}
                                             className={clsx(
-                                                "flex gap-3 p-3 cursor-pointer transition-all group",
+                                                "flex gap-4 p-3 cursor-pointer transition-all duration-300 group rounded-[5px] border border-transparent",
+                                                isCurrent ? "bg-[var(--theater-surface)] border-white/10 shadow-lg" : "hover:bg-white/5"
                                             )}
-                                            style={{
-                                                background: isCurrent ? 'var(--theme-background-elevated)' : 'transparent',
-                                                borderLeft: isCurrent ? `3px solid var(--theme-primary)` : '3px solid transparent',
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                if (!isCurrent) e.currentTarget.style.background = 'var(--theme-background-elevated)';
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                if (!isCurrent) e.currentTarget.style.background = 'transparent';
-                                            }}
+                                            onClick={() => onPlayLesson(item)}
                                         >
                                             {/* Thumbnail */}
-                                            <div className="relative shrink-0 w-40 h-24 rounded-lg overflow-hidden" style={{ background: 'var(--theme-background)' }}>
+                                            <div className="relative shrink-0 w-32 h-20 rounded-[5px] overflow-hidden bg-black/40 border border-white/5">
                                                 {/* Thumbnail Content */}
                                                 <div className="absolute inset-0 flex items-center justify-center">
                                                     {isCurrent ? (
@@ -239,38 +219,7 @@ const RightPanel = ({
                             </div>
                         )}
 
-                        {/* Next Course Suggestion */}
-                        {nextCourse && (
-                            <div className="mt-4 p-4" style={{ borderTop: '1px solid var(--theme-border)' }}>
-                                <h5 className="text-xs font-semibold uppercase mb-3" style={{ color: 'var(--theme-text-secondary)' }}>
-                                    Up Next
-                                </h5>
-                                <button
-                                    onClick={() => onPlayCourse(nextCourse)}
-                                    className="w-full flex items-center gap-3 group text-left p-3 rounded-lg transition-all"
-                                    style={{ background: 'var(--theme-background-elevated)' }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.background = 'var(--theme-background)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.background = 'var(--theme-background-elevated)';
-                                    }}
-                                >
-                                    <div className="w-12 h-12 rounded flex items-center justify-center shrink-0" style={{ background: 'var(--theme-background)' }}>
-                                        <ListVideo size={20} style={{ color: 'var(--theme-text-secondary)' }} />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="text-sm font-semibold line-clamp-1 group-hover:underline" style={{ color: 'var(--theme-text-primary)' }}>
-                                            {nextCourse.name}
-                                        </div>
-                                        <div className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>
-                                            Next course
-                                        </div>
-                                    </div>
-                                    <ArrowRight size={18} style={{ color: 'var(--theme-text-secondary)' }} />
-                                </button>
-                            </div>
-                        )}
+                        {/* Next Course Suggestion - MOVED TO STATUS BAR IN APP.JSX */}
                     </div>
                 )}
             </div>

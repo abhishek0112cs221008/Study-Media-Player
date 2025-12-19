@@ -43,7 +43,7 @@ const Row = ({ title, items, onPlay, hideTitle = false }) => {
 
             <div className="group relative">
                 <ChevronLeft
-                    className={`absolute top-0 bottom-0 left-2 z-40 m-auto h-full w-12 cursor-pointer opacity-0 transition-all duration-300 hover:bg-black/60 hover:scale-105 group-hover:opacity-100 rounded-r-md bg-black/30 backdrop-blur-sm ${!isMoved && "hidden"}`}
+                    className={`absolute top-0 bottom-0 left-2 z-40 m-auto h-full w-12 cursor-pointer opacity-0 transition-all duration-300 hover:bg-black/60 hover:scale-105 group-hover:opacity-100 rounded-[5px] bg-black/30 backdrop-blur-sm ${!isMoved && "hidden"}`}
                     onClick={() => handleClick('left')}
                     color='white'
                     size={40}
@@ -81,7 +81,7 @@ const Row = ({ title, items, onPlay, hideTitle = false }) => {
                 </div>
 
                 <ChevronRight
-                    className="absolute top-0 bottom-0 right-2 z-40 m-auto h-full w-12 cursor-pointer opacity-0 transition-all duration-300 hover:bg-black/60 hover:scale-105 group-hover:opacity-100 rounded-l-md bg-black/30 backdrop-blur-sm"
+                    className="absolute top-0 bottom-0 right-2 z-40 m-auto h-full w-12 cursor-pointer opacity-0 transition-all duration-300 hover:bg-black/60 hover:scale-105 group-hover:opacity-100 rounded-[5px] bg-black/30 backdrop-blur-sm"
                     onClick={() => handleClick('right')}
                     color='white'
                     size={40}

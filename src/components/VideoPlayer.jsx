@@ -292,7 +292,7 @@ const VideoPlayer = ({
     const [activeMenu, setActiveMenu] = useState('main'); // main, speed, quality, captions
 
     const renderSettingsMenu = () => {
-        const menuClass = "absolute bottom-full right-0 mb-3 bg-[#1e1e1e]/95 backdrop-blur-xl border border-white/10 rounded-xl w-64 shadow-2xl z-30 overflow-hidden text-sm animate-fade-in-up";
+        const menuClass = "absolute bottom-full right-0 mb-4 bg-[#18181B] backdrop-blur-2xl border border-white/10 rounded-xl w-64 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-30 overflow-hidden text-sm animate-fade-in-up";
 
         // --- Main Menu ---
         if (activeMenu === 'main') return (
@@ -409,7 +409,7 @@ const VideoPlayer = ({
     return (
         <div
             ref={wrapperRef}
-            className="relative w-full bg-black group aspect-video rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10 [&:fullscreen]:rounded-none [&:fullscreen]:ring-0 [&:fullscreen]:w-screen [&:fullscreen]:h-screen select-none"
+            className="relative w-full bg-black group aspect-video rounded-[5px] overflow-hidden shadow-2xl select-none"
             onMouseMove={showControlsTemporarily}
             onMouseLeave={() => isPlaying && setShowControls(false)}
             onClick={(e) => {
@@ -515,18 +515,6 @@ const VideoPlayer = ({
                         <div className="spinner w-12 h-12 border-4 border-white/20 border-t-[var(--theme-primary)] rounded-full"></div>
                     </div>
                 )}
-                {(!isPlaying || showControls) && isDataLoaded && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.5 }}
-                        className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
-                    >
-                        <div className="w-16 h-16 md:w-20 md:h-20 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-2xl">
-                            {isPlaying ? <Pause size={32} className="text-white fill-white" /> : <Play size={32} className="text-white fill-white ml-2" />}
-                        </div>
-                    </motion.div>
-                )}
             </AnimatePresence>
 
             {/* Controls Overlay */}
@@ -536,23 +524,29 @@ const VideoPlayer = ({
             )}>
                 {/* Progress Bar */}
                 <div
-                    className="group/progress relative w-full h-2 md:h-1.5 bg-white/20 rounded-full cursor-pointer hover:h-3 md:hover:h-2.5 transition-all duration-200 mb-6 md:mb-4 touch-none"
+                    className="group/progress relative w-full h-1 bg-white/20 cursor-pointer transition-all duration-200 mb-4 touch-none"
                     onClick={handleSeek}
-                    onMouseMove={(e) => {
-                        // TODO: Implement Thumbnail Preview logic here if we have generated thumbnails
-                    }}
                 >
-                    <div className="absolute inset-0 bg-white/10 rounded-full" style={{ width: `${buffered}%` }} />
-                    <div className="absolute inset-0 bg-[var(--theme-primary)] rounded-full flex items-center justify-end" style={{ width: `${(currentTime / duration) * 100}%` }}>
-                        <div className="w-4 h-4 md:w-3.5 md:h-3.5 bg-white rounded-full shadow-md opacity-0 group-hover/progress:opacity-100 transition-opacity transform scale-125" />
+                    {/* Buffered Progress */}
+                    <div className="absolute inset-y-0 left-0 bg-white/10" style={{ width: `${buffered}%` }} />
+
+                    {/* Current Progress Fill */}
+                    <div
+                        className="absolute inset-y-0 left-0 bg-[#E50914]"
+                        style={{ width: `${(currentTime / duration) * 100}%` }}
+                    >
+                        {/* Red Scrubber Handle */}
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3.5 h-3.5 bg-[#E50914] rounded-full shadow-lg scale-100 group-hover/progress:scale-125 transition-transform" />
                     </div>
                 </div>
 
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4 md:gap-6">
-                        <button onClick={togglePlay} className="text-white hover:text-[var(--theme-primary)] transition-colors p-2 -ml-2" aria-label={isPlaying ? "Pause" : "Play"}>
-                            {isPlaying ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" />}
-                        </button>
+                        {!isPlaying && (
+                            <button onClick={togglePlay} className="text-white hover:text-[var(--theme-primary)] transition-colors p-2 -ml-2" aria-label="Play">
+                                <Play size={28} fill="currentColor" className="rounded-[5px]" />
+                            </button>
+                        )}
 
                         <div className="flex items-center gap-4 md:gap-2">
                             {/* Rewind / Fast Forward */}
@@ -570,15 +564,15 @@ const VideoPlayer = ({
                             </button>
                         </div>
 
-                        {/* Volume - Hidden on small mobile */}
-                        <div className="hidden md:flex items-center gap-2 group/vol">
+                        {/* Volume Control */}
+                        <div className="flex items-center gap-2 group/vol">
                             <button onClick={() => {
                                 const newVol = volume === 0 ? 1 : 0;
                                 setVolume(newVol);
                                 if (videoRef.current) videoRef.current.volume = newVol;
                                 onVolumeChange?.(newVol);
-                            }} className="text-white/80 hover:text-white" aria-label={volume === 0 ? "Unmute" : "Mute"}>
-                                {volume === 0 ? <VolumeX size={20} /> : volume < 0.5 ? <Volume1 size={20} /> : <Volume2 size={20} />}
+                            }} className="text-white hover:text-white/80 transition-colors" aria-label={volume === 0 ? "Unmute" : "Mute"}>
+                                {volume === 0 ? <VolumeX size={22} /> : volume < 0.5 ? <Volume1 size={22} /> : <Volume2 size={22} />}
                             </button>
                             <input
                                 type="range"
@@ -590,7 +584,7 @@ const VideoPlayer = ({
                                     if (videoRef.current) videoRef.current.volume = val;
                                     onVolumeChange?.(val);
                                 }}
-                                className="w-0 overflow-hidden group-hover/vol:w-20 transition-all duration-300 h-1 accent-[var(--theme-primary)] bg-white/20 rounded-lg appearance-none cursor-pointer"
+                                className="w-0 overflow-hidden group-hover/vol:w-16 transition-all duration-300 h-1 accent-[#E50914] bg-white/20 rounded-lg appearance-none cursor-pointer"
                                 aria-label="Volume control"
                             />
                         </div>
