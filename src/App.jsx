@@ -10,6 +10,7 @@ import RightPanel from './components/RightPanel';
 import NotesSection from './components/NotesSection';
 import ThemeSelector from './components/ThemeSelector';
 import VideoMetadata from './components/VideoMetadata';
+import VideoCard from './components/VideoCard';
 import { scanDirectory } from './utils/fileSystem';
 import { applyTheme } from './utils/themeConfig';
 import { Play, ChevronDown, BookOpen, ArrowLeft, ArrowRight, Monitor, Laptop, Smartphone } from 'lucide-react';
@@ -135,8 +136,12 @@ const StudyApp = () => {
   const handleToggleList = (item) => {
     if (!item || !item.path) return;
     setMyList(prev => {
-      if (prev.includes(item.path)) return prev.filter(p => p !== item.path);
-      return [...prev, item.path];
+      const exists = prev.includes(item.path);
+      if (exists) {
+        return prev.filter(path => path !== item.path);
+      } else {
+        return [...prev, item.path];
+      }
     });
   };
 
@@ -326,39 +331,17 @@ const StudyApp = () => {
           {searchResults.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
               {enhance(searchResults).map((item, idx) => (
-                <div
+                <VideoCard
                   key={idx}
-                  className="group relative bg-[#181818] rounded-xl overflow-hidden cursor-pointer aspect-video ring-1 ring-white/10 hover:ring-white/30 gpu-accelerated"
-                  style={{
-                    transition: 'transform var(--duration-small) var(--ease-out), box-shadow var(--duration-small) var(--ease-out)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05) translateY(-4px)';
-                    e.currentTarget.style.boxShadow = 'var(--shadow-strong)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                  onClick={() => handlePlay(item)}
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br from-gray-800 to-black opacity-50`}></div>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-10">
-                    <span className="text-white font-semibold text-sm line-clamp-2 drop-shadow-md">{item.name}</span>
-                    <span className="absolute bottom-2 right-2 text-[10px] bg-black/60 px-1.5 py-0.5 rounded text-gray-300 uppercase tracking-widest backdrop-blur-md">{item.type}</span>
-                  </div>
-                  {(item.progress > 0) && (
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
-                      <div
-                        className="h-full bg-[#E50914]"
-                        style={{
-                          width: `${item.progress}%`,
-                          transition: 'width var(--duration-medium) var(--ease-out)'
-                        }}
-                      ></div>
-                    </div>
-                  )}
-                </div>
+                  title={item.name}
+                  type={item.type || 'video'}
+                  progress={item.progress || 0}
+                  duration={item.duration}
+                  quality={item.quality || 'HD'}
+                  inList={myList.includes(item.path)}
+                  onToggleList={() => handleToggleList(item)}
+                  onPlay={() => handlePlay(item)}
+                />
               ))}
             </div>
           ) : (
@@ -374,32 +357,30 @@ const StudyApp = () => {
       const listItems = [...courses, ...allLessons].filter(item => myList.includes(item.path));
       return (
         <div className="pt-32 px-4 md:px-12 pb-20 min-h-screen animate-fade-in relative overflow-hidden">
-          {/* Background 3D Elements */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent h-full z-0"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent h-full z-0"></div>
-          <div className="absolute inset-0 brightness-110 contrast-125 saturate-0 z-0">
-          </div>
+          {/* Clean Background */}
+          <div className="absolute inset-0 bg-[#0F171E] z-0"></div>
 
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-white mb-10 border-l-4 border-[#E50914] pl-4">My List</h2>
+            <h2 className="text-3xl font-bold text-white mb-10 border-l-4 border-[#00A8E1] pl-4">My List</h2>
             {listItems.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh] text-gray-400">
                 <p className="text-xl mb-4">Your list is empty.</p>
                 <p className="text-sm">Add courses or lessons to your list to see them here.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {enhance(listItems).map((item, idx) => (
-                  <div key={idx} onClick={() => handlePlay(item)} className="group bg-[#181818] rounded-lg overflow-hidden cursor-pointer hover:shadow-2xl hover:shadow-red-900/10 transition-all duration-300 ring-1 ring-white/5 hover:ring-white/20 relative">
-                    <div className="h-48 bg-gradient-to-br from-gray-800 to-gray-900 group-hover:from-gray-700 group-hover:to-gray-800 transition-colors relative">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <BookOpen size={48} className="text-gray-600 group-hover:text-white/20 transition-colors" />
-                      </div>
-                      <div className="absolute bottom-4 left-4 right-4 animate-slide-up">
-                        <h3 className="text-xl font-bold text-white line-clamp-2 leading-tight drop-shadow-md group-hover:text-[#E50914] transition-colors">{item.name}</h3>
-                      </div>
-                    </div>
-                  </div>
+                  <VideoCard
+                    key={idx}
+                    title={item.name}
+                    type={item.type || 'video'}
+                    progress={item.progress || 0}
+                    duration={item.duration}
+                    quality={item.quality || 'HD'}
+                    inList={true}
+                    onToggleList={() => handleToggleList(item)}
+                    onPlay={() => handlePlay(item)}
+                  />
                 ))}
               </div>
             )}
@@ -412,33 +393,30 @@ const StudyApp = () => {
     if (activeTab === 'courses') {
       return (
         <div className="pt-32 px-4 md:px-12 pb-20 min-h-screen animate-fade-in relative overflow-hidden">
-          {/* Background 3D Elements */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent h-full z-0"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent h-full z-0"></div>
-          <div className="absolute inset-0 brightness-110 contrast-125 saturate-0 z-0">
-          </div>
+          {/* Clean Background */}
+          <div className="absolute inset-0 bg-[#0F171E] z-0"></div>
 
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-white mb-10 border-l-4 border-[#E50914] pl-4">All Courses</h2>
+            <h2 className="text-3xl font-bold text-white mb-10 border-l-4 border-[#00A8E1] pl-4">All Courses</h2>
             {courses.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh] text-gray-400">
                 <p className="text-xl mb-4">No content loaded yet.</p>
                 <button onClick={handleAddFolder} className="bg-white text-black px-6 py-2 rounded font-bold hover:bg-gray-200 transition-colors">Add Folder by Series</button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {courses.map((course, idx) => (
-                  <div key={idx} onClick={() => handlePlay(course)} className="group bg-[#181818] rounded-lg overflow-hidden cursor-pointer hover:shadow-2xl hover:shadow-red-900/10 transition-all duration-300 ring-1 ring-white/5 hover:ring-white/20 relative">
-                    <div className="h-48 bg-gradient-to-br from-gray-800 to-gray-900 group-hover:from-gray-700 group-hover:to-gray-800 transition-colors relative">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <BookOpen size={48} className="text-gray-600 group-hover:text-white/20 transition-colors" />
-                      </div>
-                      <div className="absolute bottom-4 left-4 right-4 animate-slide-up">
-                        <h3 className="text-xl font-bold text-white line-clamp-2 leading-tight drop-shadow-md group-hover:text-[#E50914] transition-colors">{formatTitle(course.name)}</h3>
-                        <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider font-semibold">{course.lessons ? `${course.lessons.length} Items` : 'Course Folder'}</p>
-                      </div>
-                    </div>
-                  </div>
+                  <VideoCard
+                    key={idx}
+                    title={formatTitle(course.name)}
+                    type='folder' // Treat courses as folders
+                    progress={0}
+                    duration={null}
+                    quality={course.lessons ? `${course.lessons.length} Items` : 'Course'}
+                    inList={myList.includes(course.path)}
+                    onToggleList={() => handleToggleList(course)}
+                    onPlay={() => handlePlay(course)}
+                  />
                 ))}
               </div>
             )}
@@ -471,11 +449,12 @@ const StudyApp = () => {
         <NetflixHero
           featuredItem={featuredItem}
           onPlay={handlePlay}
-          onToggleList={handleToggleList}
+          onToggleList={() => handleToggleList(featuredRaw)}
+          inList={featuredItem ? myList.includes(featuredItem.path) : false}
         />
 
         <div className="-mt-20 relative z-20 pl-4 md:pl-12 space-y-8">
-          {inProgress.length > 0 && <NetflixRow title="Continue Learning" items={enhance(inProgress)} onPlay={handlePlay} />}
+          {inProgress.length > 0 && <NetflixRow title="Continue Learning" items={enhance(inProgress)} onPlay={handlePlay} onToggleList={handleToggleList} />}
 
           {/* Decorative Curved Divider (Apple Style) */}
           {inProgress.length > 0 && (
@@ -530,54 +509,23 @@ const StudyApp = () => {
                 {!isExpanded ? (
                   /* Collapsed: Slider View */
                   <div className="animate-fade-in">
-                    <NetflixRow title="" items={enhance(videos)} onPlay={handlePlay} hideTitle={true} />
+                    <NetflixRow title="" items={enhance(videos)} onPlay={handlePlay} hideTitle={true} onToggleList={handleToggleList} />
                   </div>
                 ) : (
                   /* Expanded: Grid View */
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-y-12 gap-x-6 pr-8 animate-fade-in-up">
                     {enhance(videos).map((item, idx) => (
-                      <div
+                      <VideoCard
                         key={idx}
-                        onClick={() => handlePlay(item)}
-                        className="group relative cursor-pointer"
-                      >
-                        <div className="relative aspect-video rounded-xl bg-[#181818] ring-1 ring-white/10 group-hover:ring-white/40 shadow-premium group-hover:shadow-premium-lg transition-all duration-300 overflow-hidden transform group-hover:scale-105 group-hover:z-50">
-                          {/* Background & Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-[#121212] to-black">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
-                          </div>
-
-                          {/* Icons */}
-                          <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-10 transition-opacity">
-                            <BookOpen size={40} className="text-gray-500" />
-                          </div>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                            <div className="w-12 h-12 rounded-full bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.3)] flex items-center justify-center backdrop-blur-sm scale-90 group-hover:scale-100">
-                              <Play fill="black" className="text-black w-5 h-5 ml-1" />
-                            </div>
-                          </div>
-
-                          {/* Text Info */}
-                          <div className="absolute inset-0 flex flex-col justify-end p-4 transition-all duration-300">
-                            <h3 className="text-gray-100 font-bold text-sm leading-tight line-clamp-2 drop-shadow-md group-hover:text-white transition-colors translate-y-2 group-hover:translate-y-0 duration-300">
-                              {item.name}
-                            </h3>
-                            <div className="mt-4 flex flex-col gap-2">
-                              <div className="flex items-center gap-2 text-xs text-gray-300 font-medium">
-                                <span className="text-[var(--theme-success)] font-bold">98% Match</span>
-                                <span className="border border-white/20 px-1 py-0.5 text-[10px] uppercase">HD</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Progress */}
-                          {item.progress > 0 && (
-                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700/50">
-                              <div className="h-full bg-[var(--theme-primary)] shadow-[0_0_5px_var(--theme-glow)]" style={{ width: `${item.progress}%` }}></div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                        title={item.name}
+                        type={item.type || 'video'}
+                        progress={item.progress || 0}
+                        duration={item.duration}
+                        quality={item.quality || 'HD'}
+                        inList={myList.includes(item.path)}
+                        onToggleList={() => handleToggleList(item)}
+                        onPlay={() => handlePlay(item)}
+                      />
                     ))}
                   </div>
                 )}
@@ -585,13 +533,13 @@ const StudyApp = () => {
             </div>
           )}
 
-          {audios.length > 0 && <NetflixRow title="Audio Material" items={enhance(audios)} onPlay={handlePlay} />}
+          {audios.length > 0 && <NetflixRow title="Audio Material" items={enhance(audios)} onPlay={handlePlay} onToggleList={handleToggleList} />}
 
           {/* Show all courses on home */}
           {courses.map(course => {
             // Lessons are already flattened when the course was created
             if (!course.lessons || course.lessons.length === 0) return null;
-            return <NetflixRow key={course.path} title={formatTitle(course.name)} items={enhance(course.lessons)} onPlay={handlePlay} />;
+            return <NetflixRow key={course.path} title={formatTitle(course.name)} items={enhance(course.lessons)} onPlay={handlePlay} onToggleList={handleToggleList} />;
           })}
         </div>
       </div>

@@ -12,25 +12,29 @@
   }
 
   :root {
-    /* Red Theme CSS Variables - Professional Apple Style */
-    --theme-primary: #E50914;
-    --theme-primary-dark: #B20710;
-    --theme-primary-light: #F40612;
-    --theme-gradient: linear-gradient(135deg, #000000 0%, #1C1C1E 100%);
-    --theme-glow: rgba(229, 9, 20, 0.3);
-    --theme-glow-strong: rgba(229, 9, 20, 0.5);
-    --theme-background: #000000;
-    --theme-background-light: #1C1C1E;
-    --theme-background-elevated: #2C2C2E;
-    --theme-background-rgb: 0, 0, 0;
+    /* Prime Video Theme CSS Variables - Professional Blue/Navy Style */
+    --theme-primary: #00A8E1;
+    /* Prime Blue */
+    --theme-primary-dark: #008CB9;
+    --theme-primary-light: #33B9E7;
+    --theme-gradient: linear-gradient(135deg, #0F171E 0%, #1A242F 100%);
+    --theme-glow: rgba(0, 168, 225, 0.3);
+    --theme-glow-strong: rgba(0, 168, 225, 0.5);
+    --theme-background: #0F171E;
+    /* Prime Navy Background */
+    --theme-background-light: #1A242F;
+    --theme-background-elevated: #252E39;
+    --theme-background-rgb: 15, 23, 30;
     --theme-text-primary: #FFFFFF;
-    --theme-text-secondary: #98989D;
-    --theme-text-tertiary: #48484A;
+    --theme-text-secondary: #8197A4;
+    /* Prime Muted Blue-Gray */
+    --theme-text-tertiary: #586B77;
     --theme-border: rgba(255, 255, 255, 0.1);
     --theme-border-hover: rgba(255, 255, 255, 0.2);
-    --theme-success: #46d369;
+    --theme-success: #3BBF68;
+    /* Slightly softer green */
 
-    /* Apple-Style Animation Tokens */
+    /* Animation Tokens */
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -52,30 +56,30 @@
     --space-16: 64px;
     --space-24: 96px;
 
-    /* Border Radius */
-    --radius-sm: 5px;
-    --radius-md: 5px;
-    --radius-lg: 5px;
-    --radius-xl: 5px;
+    /* Border Radius - Prime uses slightly more rounded buttons sometimes */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
 
     /* Shadows */
-    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.12);
-    --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.16);
-    --shadow-strong: 0 10px 40px rgba(0, 0, 0, 0.3);
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-strong: 0 10px 40px rgba(0, 0, 0, 0.6);
     --shadow-glow: 0 0 20px var(--theme-glow);
 
-    /* Sophisticated Professional Palette (Netflix inspired) */
-    --theater-accent: #E50914;
-    /* Netflix Red */
-    --theater-bg: #0F0F11;
-    /* Deep Charcoal Base */
-    --theater-surface: #18181B;
-    /* Zink Elevated Surface */
-    --theater-border: rgba(255, 255, 255, 0.05);
-    --theater-text: #F8FAFC;
-    /* High Contrast Slate White */
-    --theater-text-muted: #71717A;
-    /* Muted Zinc */
+    /* Sophisticated Professional Palette */
+    --theater-accent: #00A8E1;
+    /* Prime Blue */
+    --theater-bg: #0F171E;
+    /* Deep Navy Base */
+    --theater-surface: #1A242F;
+    /* Elevated Navy Surface */
+    --theater-border: rgba(255, 255, 255, 0.1);
+    --theater-text: #FFFFFF;
+    /* High Contrast White */
+    --theater-text-muted: #8197A4;
+    /* Prime Gray */
   }
 
   html {
@@ -96,400 +100,404 @@
   }
 
   body {
+    /* Prime Video uses Amazon Ember, but we'll stick to Inter as a close sans-serif match */
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
-    background: var(--theme-background);
-    color: var(--theme-text-primary);
-    line-height: 1.5;
-    overflow-x: hidden;
-    overflow-y: auto;
-    height: 100vh;
-    /* Ensure full height */
-    /* Performance optimizations */
-    -webkit-tap-highlight-color: transparent;
-    text-rendering: optimizeLegibility;
-  }
 
-  /* Smooth transitions for all interactive elements */
-  button,
-  a,
-  input,
-  select,
-  textarea {
-    transition: all var(--duration-small) var(--ease-out);
-  }
-
-  /* Focus styles for accessibility */
-  *:focus-visible {
-    outline: 2px solid var(--theme-primary);
-    outline-offset: 2px;
-  }
-
-  /* Remove default button styles */
-  button {
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-family: inherit;
-  }
-
-  /* Smooth image loading */
-  img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* Global Scrollbar Styling */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    display: block;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(229, 9, 20, 0.2);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(229, 9, 20, 0.4);
-  }
-
-  /* Firefox scrollbar */
-  * {
-    scrollbar-width: none;
-  }
-
-  /* Theater UI Utilities */
-  .theater-container {
-    border: none;
-    border-radius: 5px;
-    background: var(--theater-bg);
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    /* Removed overflow: hidden and max-height to allow scrolling in parent */
-  }
-
-  .theater-status-bar {
-    border: 1px solid var(--theater-border);
-    border-radius: 5px;
-    height: 4rem;
-    background: var(--theater-surface);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    margin-top: 1.5rem;
-    /* Increased spacing */
-    display: flex;
-    align-items: center;
-    padding: 0 1.5rem;
-    position: relative;
-    z-index: 10;
-    transition: all 0.3s var(--ease-out);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  }
-
-  .theater-status-bar:hover {
-    border-color: var(--theater-accent);
-    box-shadow: 0 0 20px rgba(229, 9, 20, 0.1);
-  }
-
-  .theater-breadcrumb {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--theater-text);
-    letter-spacing: 0.01em;
-    padding: 1rem 1.5rem;
-    background: var(--theater-surface);
-    border-bottom: 1px solid var(--theater-border);
-    font-family: 'Inter', sans-serif;
-  }
-
-  .theater-tab-container {
-    display: flex;
-    gap: 2rem;
-    padding: 1rem 1.5rem;
-  }
-
-  .theater-tab {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #98989D;
-    /* Muted gray for inactive */
-    position: relative;
-    padding: 0.5rem 0;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: all 0.3s ease;
-    letter-spacing: 0.05em;
-  }
-
-  .theater-tab.active {
-    color: #FFFFFF;
-    /* Bright white for active */
-    opacity: 1;
-  }
-
-  .theater-tab.active {
-    opacity: 1;
-  }
-
-  .theater-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: var(--theater-accent);
-    border-radius: 2px;
-    box-shadow: 0 0 10px var(--theater-accent);
-  }
-}
-
-@layer utilities {
-  .text-shadow {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  }
-
-  .text-shadow-lg {
-    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-  }
-
-  .font-nasa {
-    font-family: 'Nasalization', sans-serif;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  /* Professional Shadow System */
-  .shadow-premium {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
-      0 2px 4px -1px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
-  }
-
-  .shadow-premium-lg {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
-      0 4px 6px -2px rgba(0, 0, 0, 0.3),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
-  }
-
-  .shadow-glow-red {
-    box-shadow: 0 0 20px var(--theme-glow),
-      0 0 40px var(--theme-glow);
-  }
-
-  .shadow-glow-red-lg {
-    box-shadow: 0 0 30px var(--theme-glow-strong),
-      0 0 60px var(--theme-glow);
-  }
-
-  /* Shimmer Effect */
-  .shimmer {
-    background: linear-gradient(90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        rgba(255, 255, 255, 0) 100%);
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
+    body {
+      /* Prime Video uses Amazon Ember, but we'll stick to Inter as a close sans-serif match */
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      background: var(--theme-background);
+      color: var(--theme-text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+      /* Use min-height instead of fixed height */
+      /* Performance optimizations */
+      -webkit-tap-highlight-color: transparent;
+      text-rendering: optimizeLegibility;
     }
 
-    100% {
-      background-position: 200% 0;
-    }
-  }
-
-  /* Pulse Glow */
-  .pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-glow {
-
-    0%,
-    100% {
-      opacity: 1;
-      filter: brightness(1);
+    /* Smooth transitions for all interactive elements */
+    button,
+    a,
+    input,
+    select,
+    textarea {
+      transition: all var(--duration-small) var(--ease-out);
     }
 
-    50% {
+    /* Focus styles for accessibility */
+    *:focus-visible {
+      outline: 2px solid var(--theme-primary);
+      outline-offset: 2px;
+    }
+
+    /* Remove default button styles */
+    button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Smooth image loading */
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Global Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      display: block;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 168, 225, 0.2);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 168, 225, 0.4);
+    }
+
+    /* Firefox scrollbar */
+    * {
+      scrollbar-width: none;
+    }
+
+    /* Theater UI Utilities */
+    .theater-container {
+      border: none;
+      border-radius: 8px;
+      background: var(--theater-bg);
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      /* Removed overflow: hidden and max-height to allow scrolling in parent */
+    }
+
+    .theater-status-bar {
+      border: 1px solid var(--theater-border);
+      border-radius: 8px;
+      height: 4rem;
+      background: var(--theater-surface);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      margin-top: 1.5rem;
+      /* Increased spacing */
+      display: flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 10;
+      transition: all 0.3s var(--ease-out);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .theater-status-bar:hover {
+      border-color: var(--theater-accent);
+      box-shadow: 0 0 20px rgba(0, 168, 225, 0.1);
+    }
+
+    .theater-breadcrumb {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--theater-text);
+      letter-spacing: 0.01em;
+      padding: 1rem 1.5rem;
+      background: var(--theater-surface);
+      border-bottom: 1px solid var(--theater-border);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .theater-tab-container {
+      display: flex;
+      gap: 2rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .theater-tab {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--theme-text-secondary);
+      /* Muted gray for inactive */
+      position: relative;
+      padding: 0.5rem 0;
+      cursor: pointer;
       opacity: 0.8;
-      filter: brightness(1.2);
-    }
-  }
-
-  /* Smooth Fade In */
-  .fade-in {
-    animation: fade-in 0.5s ease-out;
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
+      transition: all 0.3s ease;
+      letter-spacing: 0.02em;
     }
 
-    to {
+    .theater-tab.active {
+      color: #FFFFFF;
+      /* Bright white for active */
       opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Scale on Hover with Spring */
-  .scale-hover {
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .scale-hover:hover {
-    transform: scale(1.05);
-  }
-
-  /* Glass Morphism */
-  .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .glass-dark {
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  /* Border Glow on Hover */
-  .border-glow-hover {
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-  }
-
-  .border-glow-hover:hover {
-    border-color: var(--theme-glow);
-    box-shadow: 0 0 15px var(--theme-glow);
-  }
-
-  /* Progress Ring */
-  .progress-ring {
-    transform: rotate(-90deg);
-    transform-origin: center;
-  }
-
-  .progress-ring-circle {
-    transition: stroke-dashoffset 0.5s ease;
-    stroke-linecap: round;
-  }
-
-  /* Loading Spinner */
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  .spinner {
-    animation: spin 1s linear infinite;
-  }
-
-  /* Apple-Style Utility Classes */
-  .smooth-hover {
-    transition: transform var(--duration-small) var(--ease-out),
-      box-shadow var(--duration-small) var(--ease-out);
-  }
-
-  .smooth-hover:hover {
-    transform: translateY(-2px);
-  }
-
-  .scale-hover {
-    transition: transform var(--duration-small) var(--ease-out);
-  }
-
-  .scale-hover:hover {
-    transform: scale(1.05);
-  }
-
-  .button-press:active {
-    transform: scale(0.95);
-  }
-
-  /* Frosted Glass Effect */
-  .glass {
-    background: rgba(var(--theme-background-rgb), 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-
-  /* Performance Optimizations */
-  .gpu-accelerated {
-    will-change: transform;
-    transform: translateZ(0);
-  }
-
-  .smooth-scroll {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Fade In Animation */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
     }
 
-    to {
+    .theater-tab.active {
       opacity: 1;
-      transform: translateY(0);
+    }
+
+    .theater-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--theater-accent);
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--theater-accent);
     }
   }
 
-  .fade-in {
-    animation: fadeIn var(--duration-medium) var(--ease-out);
-  }
-
-  /* Shimmer Loading Effect */
-  @keyframes shimmer {
-    0% {
-      background-position: -1000px 0;
+  @layer utilities {
+    .text-shadow {
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
-    100% {
-      background-position: 1000px 0;
+    .text-shadow-lg {
+      text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
     }
-  }
 
-  .shimmer {
-    background: linear-gradient(90deg,
-        var(--theme-background-elevated) 0%,
-        var(--theme-background-light) 50%,
-        var(--theme-background-elevated) 100%);
-    background-size: 1000px 100%;
-    animation: shimmer 2s infinite;
-  }
+    .font-nasa {
+      font-family: 'Nasalization', sans-serif;
+    }
 
-  /* Grid Pattern Background */
-  .bg-grid-pattern {
-    background-size: 40px 40px;
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-position: center top;
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Professional Shadow System */
+    .shadow-premium {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
+        0 2px 4px -1px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .shadow-premium-lg {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
+        0 4px 6px -2px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .shadow-glow-red {
+      box-shadow: 0 0 20px var(--theme-glow),
+        0 0 40px var(--theme-glow);
+    }
+
+    .shadow-glow-red-lg {
+      box-shadow: 0 0 30px var(--theme-glow-strong),
+        0 0 60px var(--theme-glow);
+    }
+
+    /* Shimmer Effect */
+    .shimmer {
+      background: linear-gradient(90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.05) 50%,
+          rgba(255, 255, 255, 0) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    /* Pulse Glow */
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        opacity: 1;
+        filter: brightness(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        filter: brightness(1.2);
+      }
+    }
+
+    /* Smooth Fade In */
+    .fade-in {
+      animation: fade-in 0.5s ease-out;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Scale on Hover with Spring */
+    .scale-hover {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .scale-hover:hover {
+      transform: scale(1.05);
+    }
+
+    /* Glass Morphism */
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-dark {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Border Glow on Hover */
+    .border-glow-hover {
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .border-glow-hover:hover {
+      border-color: var(--theme-glow);
+      box-shadow: 0 0 15px var(--theme-glow);
+    }
+
+    /* Progress Ring */
+    .progress-ring {
+      transform: rotate(-90deg);
+      transform-origin: center;
+    }
+
+    .progress-ring-circle {
+      transition: stroke-dashoffset 0.5s ease;
+      stroke-linecap: round;
+    }
+
+    /* Loading Spinner */
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    /* Apple-Style Utility Classes */
+    .smooth-hover {
+      transition: transform var(--duration-small) var(--ease-out),
+        box-shadow var(--duration-small) var(--ease-out);
+    }
+
+    .smooth-hover:hover {
+      transform: translateY(-2px);
+    }
+
+    .scale-hover {
+      transition: transform var(--duration-small) var(--ease-out);
+    }
+
+    .scale-hover:hover {
+      transform: scale(1.05);
+    }
+
+    .button-press:active {
+      transform: scale(0.95);
+    }
+
+    /* Frosted Glass Effect */
+    .glass {
+      background: rgba(var(--theme-background-rgb), 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* Performance Optimizations */
+    .gpu-accelerated {
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    .smooth-scroll {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Fade In Animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn var(--duration-medium) var(--ease-out);
+    }
+
+    /* Shimmer Loading Effect */
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+
+    .shimmer {
+      background: linear-gradient(90deg,
+          var(--theme-background-elevated) 0%,
+          var(--theme-background-light) 50%,
+          var(--theme-background-elevated) 100%);
+      background-size: 1000px 100%;
+      animation: shimmer 2s infinite;
+    }
+
+    /* Grid Pattern Background */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-position: center top;
+    }
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Menu, X, Home, Library, FolderPlus, List, ChevronRight, Loader2, Palette } from 'lucide-react';
+import { Search, Menu, X, Home, Library, List, User, ChevronDown, FolderPlus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import NotificationBadge from './NotificationBadge';
@@ -28,85 +28,100 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
 
     return (
         <motion.nav
-            layout
-            transition={{ type: "spring", stiffness: 120, damping: 20 }}
             className={clsx(
-                "fixed z-50 flex items-center justify-between transition-all duration-300",
-                // FLOATING PILL DESIGN always active (or mostly) for this specific look
-                "top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full px-5 py-2 bg-[#111]/90 backdrop-blur-xl border border-white/10 shadow-2xl"
+                "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-16 transition-all duration-300",
+                isScrolled ? "bg-[#0F171E] shadow-xl" : "bg-gradient-to-b from-[#0F171E] to-transparent",
+                "h-20" // Fixed height header
             )}
         >
-
-            {/* Logo - Red Bebas Style */}
-            <div
-                className="group relative cursor-pointer select-none flex items-center gap-2"
-                onClick={() => setActiveTab('home')}
-                aria-label="Go to Home"
-            >
-                <span className="relative text-3xl md:text-4xl font-normal tracking-tight text-[#E50914] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] font-['Bebas_Neue'] scale-y-105">
-                    STUDYFLIX
-                </span>
-            </div>
-
-            {/* Centered Desktop Links - Pill Container */}
-            <div className="hidden md:flex items-center gap-1 bg-[#222]/50 p-1 rounded-full border border-white/5 backdrop-blur-md">
-                {navLinks.map(link => {
-                    const Icon = link.icon;
-                    const isActive = activeTab === link.id;
-                    return (
-                        <button
-                            key={link.id}
-                            onClick={() => {
-                                setActiveTab(link.id);
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }}
-                            className={clsx(
-                                "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300",
-                                isActive
-                                    ? "bg-[#333] text-white shadow-sm"
-                                    : "text-gray-400 hover:text-white hover:bg-white/5"
-                            )}
-                            aria-label={link.label}
-                        >
-                            <Icon size={16} className={clsx("transition-transform", isActive && "scale-105")} />
-                            {link.label}
-                            {link.id === 'list' && stats?.myListCount > 0 && (
-                                <NotificationBadge count={stats.myListCount} pulse={false} />
-                            )}
-                        </button>
-                    );
-                })}
-            </div>
-
-            {/* Right Actions */}
-            <div className="flex items-center gap-4">
-                {/* Search Bar - Dark Pill */}
-                <div className="hidden md:flex items-center bg-[#222]/80 border border-white/5 rounded-full px-3 py-1.5 w-64 focus-within:w-72 focus-within:bg-[#333] transition-all duration-300">
-                    <input
-                        type="text"
-                        placeholder="Search courses..."
-                        className="bg-transparent border-none outline-none text-sm text-white placeholder-gray-500 w-full"
-                        value={searchQuery}
-                        onChange={(e) => onSearch(e.target.value)}
-                    />
-                    <Search size={18} className="text-gray-400" />
-                </div>
-                {/* Mobile Search Icon */}
-                <button onClick={() => setShowSearch(!showSearch)} className="md:hidden text-gray-300 hover:text-white">
-                    <Search size={22} />
-                </button>
-
-
-                {/* Theme Selector Button */}
-                <button
-                    onClick={onOpenThemeSelector}
-                    className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 text-gray-300 hover:text-white transition-all duration-300"
-                    title="Theme Options"
+            {/* Left Section: Logo & Links */}
+            <div className="flex items-center gap-12">
+                {/* Logo */}
+                <div
+                    className="cursor-pointer select-none"
+                    onClick={() => setActiveTab('home')}
                 >
-                    <Palette size={20} />
-                </button>
+                    <span className="text-2xl font-bold tracking-tight text-white drop-shadow-md font-sans">
+                        prime <span className="text-[#00A8E1]">study</span>
+                    </span>
+                </div>
 
-                {/* CTA Button: Get Started (Red) */}
+                {/* Desktop Navigation Links (Centered-ish) */}
+                <div className="hidden md:flex items-center gap-8">
+                    {navLinks.map(link => {
+                        const isActive = activeTab === link.id;
+                        return (
+                            <button
+                                key={link.id}
+                                onClick={() => {
+                                    setActiveTab(link.id);
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }}
+                                className={clsx(
+                                    "relative text-lg font-semibold transition-colors duration-200",
+                                    isActive ? "text-white" : "text-[#8197A4] hover:text-white"
+                                )}
+                            >
+                                {link.label}
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="activeTab"
+                                        className="absolute -bottom-7 left-0 right-0 h-[3px] bg-white rounded-t-sm"
+                                    />
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Right Section: Actions */}
+            <div className="flex items-center gap-6">
+                {/* Search */}
+                <div className="relative group">
+                    <button
+                        onClick={() => setShowSearch(!showSearch)}
+                        className={clsx(
+                            "text-[#8197A4] hover:text-white transition-colors",
+                            showSearch && "text-white"
+                        )}
+                    >
+                        <Search size={22} strokeWidth={2.5} />
+                    </button>
+                    {showSearch && (
+                        <div className="absolute right-0 top-12 w-72 bg-[#1A242F] border border-[#252E39] rounded shadow-2xl p-2 animate-fade-in">
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className="w-full bg-[#0F171E] text-white px-3 py-2 rounded border border-transparent focus:border-[#00A8E1] outline-none placeholder-[#8197A4]"
+                                value={searchQuery}
+                                onChange={(e) => onSearch(e.target.value)}
+                                autoFocus
+                            />
+                        </div>
+                    )}
+                </div>
+
+                {/* User Profile - Simplified (No Theme Selector) */}
+                <div className="hidden md:flex items-center gap-2 cursor-pointer text-[#8197A4] hover:text-white transition-colors group">
+                    <div className="w-8 h-8 rounded-full bg-[#252E39] flex items-center justify-center border border-white/10 group-hover:border-white/30">
+                        <User size={18} />
+                    </div>
+                    <ChevronDown size={14} />
+
+                    {/* Simplified Dropdown */}
+                    <div className="absolute top-12 right-20 w-48 bg-[#1A242F] border border-[#252E39] rounded shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200 py-2">
+                        <div className="px-4 py-2 text-xs font-bold text-[#8197A4] uppercase tracking-wider">Profile</div>
+                        <button className="w-full text-left px-4 py-2 text-white hover:bg-[#252E39] text-sm">
+                            Account Settings
+                        </button>
+                    </div>
+                </div>
+
+                {/* Vertical Divider */}
+                <div className="h-6 w-[1px] bg-white/20 hidden md:block"></div>
+
+                {/* CTA Button: OPEN FOLDER */}
                 <button
                     onClick={async () => {
                         setIsLoading(true);
@@ -114,19 +129,13 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                         setIsLoading(false);
                     }}
                     disabled={isLoading}
-                    className="hidden md:flex items-center gap-2 bg-[#E50914] hover:bg-[#ff0f1f] text-white px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 shadow-[0_4px_15px_rgba(229,9,20,0.4)] hover:shadow-[0_6px_20px_rgba(229,9,20,0.6)] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+                    className="hidden md:flex items-center justify-center bg-[#00A8E1] hover:bg-[#008CB9] text-white px-5 py-2.5 rounded-[4px] font-bold text-base transition-all shadow-lg hover:shadow-[#00A8E1]/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {isLoading ? (
-                        <Loader2 size={18} className="animate-spin" />
-                    ) : (
-                        <FolderPlus size={18} />
-                    )}
-                    <span>{isLoading ? 'Loading...' : 'Get Started'}</span>
-                    {!isLoading && <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />}
+                    {isLoading ? 'Loading...' : 'Open Folder'}
                 </button>
 
-                {/* Mobile Menu Toggle */}
-                <button className="md:hidden text-white p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                {/* Mobile Menu */}
+                <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                     {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
@@ -135,51 +144,39 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        className="absolute top-full left-0 right-0 mt-4 bg-[#141414]/95 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 flex flex-col gap-4 text-center md:hidden shadow-2xl overflow-hidden"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="fixed inset-0 top-20 bg-[#0F171E] z-40 overflow-y-auto md:hidden p-6"
                     >
-                        {/* Mobile Search Input */}
-                        <div className="flex items-center bg-[#222] rounded-full px-4 py-3 border border-white/10">
-                            <Search size={18} className="text-gray-400 mr-2" />
-                            <input
-                                type="text"
-                                placeholder="Search courses..."
-                                className="bg-transparent border-none outline-none text-white w-full"
-                                value={searchQuery}
-                                onChange={(e) => onSearch(e.target.value)}
-                            />
-                        </div>
-
-
-                        {navLinks.map(link => {
-                            const Icon = link.icon;
-                            return (
+                        {/* Mobile Links */}
+                        <div className="flex flex-col gap-6">
+                            {navLinks.map(link => (
                                 <button
-                                    key={link.id + 'mobile'}
+                                    key={link.id}
                                     onClick={() => {
                                         setActiveTab(link.id);
                                         setMobileMenuOpen(false);
                                     }}
                                     className={clsx(
-                                        "flex items-center justify-center gap-3 p-3 rounded-xl transition-colors",
-                                        activeTab === link.id ? "bg-white/10 text-white" : "text-gray-400 hover:text-white hover:bg-white/5"
+                                        "text-xl font-bold flex items-center gap-4",
+                                        activeTab === link.id ? "text-[#00A8E1]" : "text-white"
                                     )}
                                 >
-                                    <Icon size={20} />
-                                    <span className="font-semibold text-lg">{link.label}</span>
+                                    <link.icon size={24} />
+                                    {link.label}
                                 </button>
-                            );
-                        })}
-                        <div className="h-px bg-white/10 my-2" />
-                        <button
-                            onClick={() => { onLoadFolder(); setMobileMenuOpen(false); }}
-                            className="bg-[#E50914] text-white p-4 rounded-xl font-bold flex items-center justify-center gap-2"
-                        >
-                            <FolderPlus size={20} />
-                            Get Started
-                        </button>
+                            ))}
+
+                            <hr className="border-gray-800 my-2" />
+
+                            <button
+                                onClick={() => { onLoadFolder(); setMobileMenuOpen(false); }}
+                                className="w-full bg-[#00A8E1] text-white py-3 rounded font-bold"
+                            >
+                                Try for free
+                            </button>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
