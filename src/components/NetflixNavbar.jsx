@@ -30,7 +30,7 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
         <motion.nav
             className={clsx(
                 "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-16 transition-all duration-300",
-                isScrolled ? "bg-[#0F171E] shadow-xl" : "bg-gradient-to-b from-[#0F171E] to-transparent",
+                isScrolled ? "glass bg-[var(--theme-background)]/80 shadow-glow-red" : "bg-gradient-to-b from-[var(--theme-background)] to-transparent",
                 "h-20" // Fixed height header
             )}
         >
@@ -42,7 +42,7 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                     onClick={() => setActiveTab('home')}
                 >
                     <span className="text-2xl font-bold tracking-tight text-white drop-shadow-md font-sans">
-                        prime <span className="text-[#00A8E1]">study</span>
+                        prime <span className="text-[var(--theme-primary)]">study</span>
                     </span>
                 </div>
 
@@ -59,7 +59,7 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                                 }}
                                 className={clsx(
                                     "relative text-lg font-semibold transition-colors duration-200",
-                                    isActive ? "text-white" : "text-[#8197A4] hover:text-white"
+                                    isActive ? "text-white" : "text-[var(--theme-text-secondary)] hover:text-white"
                                 )}
                             >
                                 {link.label}
@@ -82,18 +82,18 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                     <button
                         onClick={() => setShowSearch(!showSearch)}
                         className={clsx(
-                            "text-[#8197A4] hover:text-white transition-colors",
+                            "text-[var(--theme-text-secondary)] hover:text-white transition-colors",
                             showSearch && "text-white"
                         )}
                     >
                         <Search size={22} strokeWidth={2.5} />
                     </button>
                     {showSearch && (
-                        <div className="absolute right-0 top-12 w-72 bg-[#1A242F] border border-[#252E39] rounded shadow-2xl p-2 animate-fade-in">
+                        <div className="absolute right-0 top-12 w-72 glass bg-[var(--theme-background-elevated)] border border-[var(--theme-border)] rounded shadow-2xl p-2 animate-fade-in">
                             <input
                                 type="text"
                                 placeholder="Search..."
-                                className="w-full bg-[#0F171E] text-white px-3 py-2 rounded border border-transparent focus:border-[#00A8E1] outline-none placeholder-[#8197A4]"
+                                className="w-full bg-[var(--theme-background)] text-white px-3 py-2 rounded border border-transparent focus:border-[var(--theme-primary)] outline-none placeholder-[var(--theme-text-secondary)]"
                                 value={searchQuery}
                                 onChange={(e) => onSearch(e.target.value)}
                                 autoFocus
@@ -103,16 +103,16 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                 </div>
 
                 {/* User Profile - Simplified (No Theme Selector) */}
-                <div className="hidden md:flex items-center gap-2 cursor-pointer text-[#8197A4] hover:text-white transition-colors group">
-                    <div className="w-8 h-8 rounded-full bg-[#252E39] flex items-center justify-center border border-white/10 group-hover:border-white/30">
+                <div className="hidden md:flex items-center gap-2 cursor-pointer text-[var(--theme-text-secondary)] hover:text-white transition-colors group">
+                    <div className="w-8 h-8 rounded-full bg-[var(--theme-background-elevated)] flex items-center justify-center border border-white/10 group-hover:border-white/30">
                         <User size={18} />
                     </div>
                     <ChevronDown size={14} />
 
                     {/* Simplified Dropdown */}
-                    <div className="absolute top-12 right-20 w-48 bg-[#1A242F] border border-[#252E39] rounded shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200 py-2">
-                        <div className="px-4 py-2 text-xs font-bold text-[#8197A4] uppercase tracking-wider">Profile</div>
-                        <button className="w-full text-left px-4 py-2 text-white hover:bg-[#252E39] text-sm">
+                    <div className="absolute top-12 right-20 w-48 glass bg-[var(--theme-background-elevated)] border border-[var(--theme-border)] rounded shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200 py-2">
+                        <div className="px-4 py-2 text-xs font-bold text-[var(--theme-text-secondary)] uppercase tracking-wider">Profile</div>
+                        <button className="w-full text-left px-4 py-2 text-white hover:bg-[var(--theme-background-elevated)] text-sm">
                             Account Settings
                         </button>
                     </div>
@@ -129,7 +129,7 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                         setIsLoading(false);
                     }}
                     disabled={isLoading}
-                    className="hidden md:flex items-center justify-center bg-[#00A8E1] hover:bg-[#008CB9] text-white px-5 py-2.5 rounded-[4px] font-bold text-base transition-all shadow-lg hover:shadow-[#00A8E1]/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="hidden md:flex items-center justify-center bg-[var(--theme-primary)] hover:bg-[var(--theme-primary-dark)] text-white px-5 py-2.5 rounded-[4px] font-bold text-base transition-all shadow-lg hover:shadow-[var(--theme-primary)]/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isLoading ? 'Loading...' : 'Open Folder'}
                 </button>
@@ -147,7 +147,7 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="fixed inset-0 top-20 bg-[#0F171E] z-40 overflow-y-auto md:hidden p-6"
+                        className="fixed inset-0 top-20 bg-[var(--theme-background)] z-40 overflow-y-auto md:hidden p-6"
                     >
                         {/* Mobile Links */}
                         <div className="flex flex-col gap-6">
@@ -160,7 +160,7 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
                                     }}
                                     className={clsx(
                                         "text-xl font-bold flex items-center gap-4",
-                                        activeTab === link.id ? "text-[#00A8E1]" : "text-white"
+                                        activeTab === link.id ? "text-[var(--theme-primary)]" : "text-white"
                                     )}
                                 >
                                     <link.icon size={24} />
@@ -172,7 +172,7 @@ const Navbar = ({ onSearch, searchQuery, onLoadFolder, activeTab, setActiveTab, 
 
                             <button
                                 onClick={() => { onLoadFolder(); setMobileMenuOpen(false); }}
-                                className="w-full bg-[#00A8E1] text-white py-3 rounded font-bold"
+                                className="w-full bg-[var(--theme-primary)] text-white py-3 rounded font-bold"
                             >
                                 Try for free
                             </button>

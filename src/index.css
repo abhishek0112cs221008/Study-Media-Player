@@ -12,29 +12,37 @@
   }
 
   :root {
-    /* Prime Video Theme CSS Variables - Professional Blue/Navy Style */
-    --theme-primary: #00A8E1;
-    /* Prime Blue */
-    --theme-primary-dark: #008CB9;
-    --theme-primary-light: #33B9E7;
-    --theme-gradient: linear-gradient(135deg, #0F171E 0%, #1A242F 100%);
-    --theme-glow: rgba(0, 168, 225, 0.3);
-    --theme-glow-strong: rgba(0, 168, 225, 0.5);
-    --theme-background: #0F171E;
-    /* Prime Navy Background */
-    --theme-background-light: #1A242F;
-    --theme-background-elevated: #252E39;
-    --theme-background-rgb: 15, 23, 30;
-    --theme-text-primary: #FFFFFF;
-    --theme-text-secondary: #8197A4;
-    /* Prime Muted Blue-Gray */
-    --theme-text-tertiary: #586B77;
-    --theme-border: rgba(255, 255, 255, 0.1);
-    --theme-border-hover: rgba(255, 255, 255, 0.2);
-    --theme-success: #3BBF68;
-    /* Slightly softer green */
+    /* Black Baccara Rose & Black Glassy Theme */
+    /* Deep Dark Red / Burgundy Palette */
+    --theme-primary: #7B0816;
+    /* Deep Baccara Rose Red */
+    --theme-primary-dark: #4A050D;
+    /* Darker Burgundy */
+    --theme-primary-light: #A31B2A;
+    /* Lighter Rose */
 
-    /* Animation Tokens */
+    --theme-gradient: linear-gradient(180deg, #000000 0%, #1a0204 100%);
+    --theme-glow: rgba(123, 8, 22, 0.4);
+    --theme-glow-strong: rgba(123, 8, 22, 0.7);
+
+    --theme-background: #000000;
+    /* Pure Black */
+    --theme-background-light: #0d0d0d;
+    /* Slightly lighter black */
+    --theme-background-elevated: #1a0204;
+    /* Dark red tint for elevated surfaces */
+    --theme-background-rgb: 0, 0, 0;
+
+    --theme-text-primary: #FFFFFF;
+    --theme-text-secondary: #aaaaaa;
+    --theme-text-tertiary: #666666;
+
+    --theme-border: rgba(255, 255, 255, 0.1);
+    --theme-border-hover: rgba(123, 8, 22, 0.5);
+
+    --theme-success: #3BBF68;
+
+    /* Animation Tokens - Kept same */
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -56,30 +64,26 @@
     --space-16: 64px;
     --space-24: 96px;
 
-    /* Border Radius - Prime uses slightly more rounded buttons sometimes */
+    /* Border Radius */
     --radius-sm: 4px;
     --radius-md: 6px;
     --radius-lg: 8px;
     --radius-xl: 12px;
 
     /* Shadows */
-    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.5);
-    --shadow-strong: 0 10px 40px rgba(0, 0, 0, 0.6);
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.8);
+    --shadow-strong: 0 10px 40px rgba(0, 0, 0, 0.9);
     --shadow-glow: 0 0 20px var(--theme-glow);
 
-    /* Sophisticated Professional Palette */
-    --theater-accent: #00A8E1;
-    /* Prime Blue */
-    --theater-bg: #0F171E;
-    /* Deep Navy Base */
-    --theater-surface: #1A242F;
-    /* Elevated Navy Surface */
+    /* Theater / Component Mappings */
+    --theater-accent: #7B0816;
+    --theater-bg: #000000;
+    --theater-surface: rgba(20, 0, 0, 0.6);
+    /* Glassy dark red/black */
     --theater-border: rgba(255, 255, 255, 0.1);
     --theater-text: #FFFFFF;
-    /* High Contrast White */
-    --theater-text-muted: #8197A4;
-    /* Prime Gray */
+    --theater-text-muted: #9CA3AF;
   }
 
   html {
@@ -158,12 +162,12 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: rgba(0, 168, 225, 0.2);
+      background: rgba(123, 8, 22, 0.2);
       border-radius: 10px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 168, 225, 0.4);
+      background: rgba(123, 8, 22, 0.4);
     }
 
     /* Firefox scrollbar */
@@ -203,7 +207,7 @@
 
     .theater-status-bar:hover {
       border-color: var(--theater-accent);
-      box-shadow: 0 0 20px rgba(0, 168, 225, 0.1);
+      box-shadow: 0 0 20px rgba(123, 8, 22, 0.1);
     }
 
     .theater-breadcrumb {

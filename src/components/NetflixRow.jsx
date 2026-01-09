@@ -24,16 +24,16 @@ const Row = ({ title, items, onPlay, hideTitle = false, onToggleList }) => {
         <div className="h-auto mb-12 space-y-4 px-8 md:px-12 group/row relative z-20 animate-fade-in-up">
             {!hideTitle && (
                 <div className="flex items-end gap-2 mb-2">
-                    <h2 className="text-xl font-bold text-[#e5e5e5] hover:text-[#00A8E1] cursor-pointer transition-colors duration-200">
+                    <h2 className="text-xl font-bold text-[#e5e5e5] hover:text-[var(--theme-primary)] cursor-pointer transition-colors duration-200">
                         {title}
                     </h2>
-                    <span className="text-xs font-bold text-[#00A8E1] opacity-0 group-hover/row:opacity-100 transition-opacity uppercase tracking-wider mb-1">See more</span>
+                    <span className="text-xs font-bold text-[var(--theme-primary)] opacity-0 group-hover/row:opacity-100 transition-opacity uppercase tracking-wider mb-1">See more</span>
                 </div>
             )}
 
             <div className="group relative">
                 <ChevronLeft
-                    className={`absolute top-0 bottom-10 left-0 z-40 m-auto h-full w-12 cursor-pointer opacity-0 transition-opacity duration-300 hover:bg-[#0F171E]/60 hover:text-white group-hover:opacity-100 bg-[#0F171E]/30 backdrop-blur-sm border-r border-white/10 ${!isMoved && "hidden"}`}
+                    className={`absolute top-0 bottom-10 left-0 z-40 m-auto h-full w-12 cursor-pointer opacity-0 transition-opacity duration-300 hover:bg-[var(--theme-background)]/60 hover:text-white group-hover:opacity-100 bg-[var(--theme-background)]/30 backdrop-blur-sm border-r border-white/10 ${!isMoved && "hidden"}`}
                     onClick={() => handleClick('left')}
                     color='white'
                     size={48}
@@ -64,7 +64,7 @@ const Row = ({ title, items, onPlay, hideTitle = false, onToggleList }) => {
                 </div>
 
                 <ChevronRight
-                    className="absolute top-0 bottom-10 right-0 z-40 m-auto h-full w-12 cursor-pointer opacity-0 transition-opacity duration-300 hover:bg-[#0F171E]/60 hover:text-white group-hover:opacity-100 bg-[#0F171E]/30 backdrop-blur-sm border-l border-white/10"
+                    className="absolute top-0 bottom-10 right-0 z-40 m-auto h-full w-12 cursor-pointer opacity-0 transition-opacity duration-300 hover:bg-[var(--theme-background)]/60 hover:text-white group-hover:opacity-100 bg-[var(--theme-background)]/30 backdrop-blur-sm border-l border-white/10"
                     onClick={() => handleClick('right')}
                     color='white'
                     size={48}

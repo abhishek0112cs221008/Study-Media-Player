@@ -358,10 +358,10 @@ const StudyApp = () => {
       return (
         <div className="pt-32 px-4 md:px-12 pb-20 min-h-screen animate-fade-in relative overflow-hidden">
           {/* Clean Background */}
-          <div className="absolute inset-0 bg-[#0F171E] z-0"></div>
+          <div className="absolute inset-0 bg-[var(--theme-background)] z-0"></div>
 
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-white mb-10 border-l-4 border-[#00A8E1] pl-4">My List</h2>
+            <h2 className="text-3xl font-bold text-white mb-10 border-l-4 border-[var(--theme-primary)] pl-4">My List</h2>
             {listItems.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh] text-gray-400">
                 <p className="text-xl mb-4">Your list is empty.</p>
@@ -394,10 +394,10 @@ const StudyApp = () => {
       return (
         <div className="pt-32 px-4 md:px-12 pb-20 min-h-screen animate-fade-in relative overflow-hidden">
           {/* Clean Background */}
-          <div className="absolute inset-0 bg-[#0F171E] z-0"></div>
+          <div className="absolute inset-0 bg-[var(--theme-background)] z-0"></div>
 
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-white mb-10 border-l-4 border-[#00A8E1] pl-4">All Courses</h2>
+            <h2 className="text-3xl font-bold text-white mb-10 border-l-4 border-[var(--theme-primary)] pl-4">All Courses</h2>
             {courses.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh] text-gray-400">
                 <p className="text-xl mb-4">No content loaded yet.</p>

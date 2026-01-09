@@ -33,10 +33,10 @@ const VideoCard = ({ title, type = 'video', progress = 0, duration = null, quali
             onClick={onPlay}
         >
             {/* Card Content - 16:9 Aspect Ratio */}
-            <div className="relative aspect-video rounded-md overflow-hidden bg-[#1A242F] border border-white/5 transition-all duration-300 md:hover:scale-105 hover:z-20 hover:border-[#00A8E1] hover:shadow-[0_0_20px_rgba(0,168,225,0.3)]">
+            <div className="relative aspect-video rounded-md overflow-hidden bg-[var(--theme-background-elevated)] border border-white/5 transition-all duration-300 md:hover:scale-105 hover:z-20 hover:border-[var(--theme-primary)] hover:shadow-[0_0_20px_var(--theme-glow)]">
 
                 {/* Fallback Gradient/Thumbnail */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1A242F] to-[#0F171E] group-hover:from-[#252E39] group-hover:to-[#1A242F] transition-colors">
+                <div className="absolute inset-0 bg-gradient-to-br from-[var(--theme-background-elevated)] to-[var(--theme-background)] group-hover:from-[var(--theme-primary-dark)]/20 group-hover:to-[var(--theme-background-elevated)] transition-colors">
                     {/* Centered Icon as placeholder for thumbnail */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-50 transition-opacity scale-100 group-hover:scale-110 duration-500">
                         {getIcon()}
@@ -47,7 +47,7 @@ const VideoCard = ({ title, type = 'video', progress = 0, duration = null, quali
                 {progress > 0 && (
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
                         <div
-                            className="h-full bg-[#00A8E1]"
+                            className="h-full bg-[var(--theme-primary)]"
                             style={{ width: `${progress}%` }}
                         ></div>
                     </div>
@@ -55,7 +55,7 @@ const VideoCard = ({ title, type = 'video', progress = 0, duration = null, quali
 
                 {/* Prime Badge (Top Left) */}
                 <div className="absolute top-0 left-0">
-                    <div className="bg-[#00A8E1] text-white text-[10px] font-bold px-2 py-1 rounded-br-md flex items-center gap-1 shadow-md">
+                    <div className="bg-[var(--theme-primary)] text-white text-[10px] font-bold px-2 py-1 rounded-br-md flex items-center gap-1 shadow-md">
                         <span className="italic font-extrabold font-sans">prime study</span>
                     </div>
                 </div>
@@ -91,7 +91,7 @@ const VideoCard = ({ title, type = 'video', progress = 0, duration = null, quali
                 <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black via-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <h3 className="text-white text-sm font-bold leading-tight mb-1 line-clamp-1">{title}</h3>
                     <div className="flex items-center gap-2 text-[10px] text-gray-300">
-                        <span className="flex items-center gap-0.5 text-[#00A8E1]">
+                        <span className="flex items-center gap-0.5 text-[var(--theme-primary)]">
                             <Check size={10} strokeWidth={4} />
                             Included with Prime Study
                         </span>
@@ -100,7 +100,7 @@ const VideoCard = ({ title, type = 'video', progress = 0, duration = null, quali
             </div>
 
             {/* Title Below Card (Visible by default like Prime) */}
-            <div className="mt-2 px-0.5 group-hover:text-[#00A8E1] transition-colors">
+            <div className="mt-2 px-0.5 group-hover:text-[var(--theme-primary)] transition-colors">
                 <h3 className="text-white text-sm font-medium leading-tight line-clamp-1 group-hover:font-bold">{title}</h3>
             </div>
         </div>
